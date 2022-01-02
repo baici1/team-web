@@ -1,5 +1,5 @@
 <template>
-  <div class="container" :class="{ 'sign-up-mode': signUpMode }">
+  <div :class="{ 'sign-up-mode': signUpMode, container: true }">
     <div class="form-warp">
       <form class="sign-in-form">
         <h2 class="form-title">登录</h2>
@@ -18,23 +18,16 @@
     <div class="desc-warp">
       <div class="desc-warp-item sign-up-desc">
         <div class="content">
-          <button id="sign-up-btn" @click="signUpMode = !signUpMode">
-            注册
-          </button>
-          <div class="sign-up-text">
-            敏于观察，勤于思考，善于综合，勇于创新。
-          </div>
+          <button id="sign-up-btn" @click="signUpMode = !signUpMode">注册</button>
+          <div class="sign-up-text">敏于观察，勤于思考，善于综合，勇于创新。</div>
         </div>
         <img src="@/assets/svg/log.svg" alt="" />
       </div>
       <div class="desc-warp-item sign-in-desc">
         <div class="content">
-          <button id="sign-in-btn" @click="signUpMode = !signUpMode">
-            登录
-          </button>
+          <button id="sign-in-btn" @click="signUpMode = !signUpMode">登录</button>
           <div class="sign-up-text">
-            Sensitive to observation, diligent in thinking, good at synthesis,
-            and courage to innovate.
+            Sensitive to observation, diligent in thinking, good at synthesis, and courage to innovate.
           </div>
         </div>
         <img src="@/assets/svg/register.svg" alt="" />
@@ -44,9 +37,9 @@
 </template>
 
 <script>
-import { ref } from "@vue/reactivity";
+import { ref } from '@vue/reactivity';
 export default {
-  name: "Login",
+  name: 'Login',
   setup() {
     const signUpMode = ref(false);
     return {
