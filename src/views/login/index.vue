@@ -26,7 +26,7 @@
         <el-form-item name="password2" hasFeedback>
           <el-input v-model="signupState.password2" type="password" class="sign-in-input" placeholder="确认密码" />
         </el-form-item>
-        <a-button class="submit-btn" @click="signup">立即注册</a-button>
+        <el-button class="submit-btn" @click="signup">立即注册</el-button>
       </el-form>
     </div>
     <div class="desc-warp">
@@ -35,8 +35,7 @@
           <button id="sign-up-btn" @click="signUpMode = !signUpMode">注册</button>
           <div class="sign-up-text">敏于观察，勤于思考，善于综合，勇于创新。</div>
         </div>
-
-        <SvgIcon :name="log"></SvgIcon>
+        <img src="@/assets/svg/log.svg" alt="" />
       </div>
       <div class="desc-warp-item sign-in-desc">
         <div class="content">
@@ -53,15 +52,13 @@
 
 <script>
 import { ref } from 'vue';
-import { message } from 'ant-design-vue';
+import { ElMessage } from 'element-plus';
 import { useStore } from 'vuex';
 import { SignIn, SignUp } from '@/api/login.js';
 import { useRouter } from 'vue-router';
 import { SignInRules, signupState, SignUpRules } from './utils/rules';
-import SvgIcon from '../../components/SvgIcon/index.vue';
 export default {
   name: 'Login',
-  components: { SvgIcon },
   setup() {
     // 状态管理
     const store = useStore();
@@ -90,7 +87,7 @@ export default {
       console.log('%c 🥐 data: ', 'font-size:20px;background-color: #93C0A4;color:#fff;', res);
       if (res.code != 200) {
         loading.value = false;
-        message.error(res.msg);
+        ElMessage.error(res.msg);
         return;
       }
       // 保存storage
@@ -110,7 +107,7 @@ export default {
           const res = await SignUp(signupState);
           console.log('%c 🍕 res: ', 'font-size:20px;background-color: #7F2B82;color:#fff;', res);
           if (res.code != 200) {
-            message.error(res.msg);
+            ElMessage.error(res.msg);
             return;
           }
           // 注册成功后直接跳进行登录，跳转页面

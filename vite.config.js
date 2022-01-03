@@ -5,14 +5,20 @@ import path from 'path';
 import { viteMockServe } from 'vite-plugin-mock';
 // 处理icon
 import viteSvgIcons from 'vite-plugin-svg-icons';
-import ViteComponents, { AntDesignVueResolver, ElementPlusResolver } from 'vite-plugin-components';
+// 导入elementui
+import AutoImport from 'unplugin-auto-import/vite';
+import Components from 'unplugin-vue-components/vite';
+import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
 // https://vitejs.dev/config/
 export default (env) => {
   return defineConfig({
     plugins: [
       vue(),
-      ViteComponents({
-        customComponentResolvers: [AntDesignVueResolver(), ElementPlusResolver()],
+      AutoImport({
+        resolvers: [ElementPlusResolver()],
+      }),
+      Components({
+        resolvers: [ElementPlusResolver()],
       }),
       viteSvgIcons({
         // 指定需要缓存的图标文件夹

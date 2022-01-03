@@ -7,7 +7,6 @@
     "serve": "vite preview"
   },
   "dependencies": {
-    "ant-design-vue": "^2.2.8",
     "axios": "^0.20.0-0",
     "element-plus": "^1.1.0-beta.21",
     "qs": "^6.10.1",
@@ -26,6 +25,8 @@
     "eslint-plugin-vue": "^8.2.0",
     "mockjs": "^1.1.0",
     "sass": "^1.43.2",
+    "unplugin-auto-import": "^0.5.5",
+    "unplugin-vue-components": "^0.17.11",
     "vite": "^2.6.4",
     "vite-plugin-mock": "^2.9.6",
     "vue-eslint-parser": "^8.0.1"
