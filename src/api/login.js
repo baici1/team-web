@@ -1,4 +1,4 @@
-import request from "@/utils/request";
+import request from '@/utils/request';
 
 /**
  * @description:登录接口
@@ -7,9 +7,9 @@ import request from "@/utils/request";
  */
 export function SignIn(data) {
   return request({
-    url: "/signin",
-    method: "post",
-    data
+    url: '/login',
+    method: 'post',
+    data,
   });
 }
 
@@ -20,8 +20,8 @@ export function SignIn(data) {
  */
 export function SignUp(data) {
   return request({
-    url: "/signup",
-    method: "post",
-    data
+    url: '/signup',
+    method: 'post',
+    data,
   });
 }

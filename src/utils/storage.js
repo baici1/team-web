@@ -1,6 +1,6 @@
 // 封装localstorage操作
 // 获取localstorage
-import qs from "qs";
+import qs from 'qs';
 export const getItem = (name) => {
   const data = window.localStorage.getItem(name);
   try {
@@ -9,15 +9,16 @@ export const getItem = (name) => {
     return data;
   }
 };
-  // 设置localstorage
+// 设置localstorage
 export const setItem = (name, value) => {
-  if (typeof value === "object") {
-    value = qs.stringify(value);
+  let v;
+  v = value;
+  if (typeof value === 'object') {
+    v = qs.stringify(value);
   }
-
-  window.localStorage.setItem(name, value);
+  window.localStorage.setItem(name, v);
 };
-  // 清除localstorage
+// 清除localstorage
 export const removeItem = (name) => {
   window.localStorage.removeItem(name);
 };

@@ -6,7 +6,7 @@
 }
 
 .container::before {
-  content: " ";
+  content: ' ';
   position: absolute;
   width: 2000px;
   height: 2000px;
@@ -24,7 +24,7 @@
 }
 
 .form-warp {
-  width: 50%;
+  width: 45%;
   position: absolute;
   z-index: 5;
   left: 75%;
@@ -80,20 +80,20 @@
 .sign-in-input,
 .submit-btn {
   min-width: 300px;
-  outline: none;
-  padding: 12px 30px;
   line-height: 1;
   font-size: 16px;
   border-radius: 60px;
   color: #333;
   background-color: #6267f513;
-  border: none;
+}
+.el-input__icon {
+  color: green;
 }
 .sign-in-input:hover {
   background-color: #6267f513;
 }
 
-.ant-form-item{
+.ant-form-item {
   margin: 0;
 }
 
@@ -222,7 +222,7 @@ img {
   }
 
   .container.sign-up-mode .form-warp {
-    top: 15%;
+    top: 10%;
     left: 50%;
     transform: translate(-50%, 0);
   }
