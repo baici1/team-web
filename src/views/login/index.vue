@@ -35,7 +35,8 @@
           <button id="sign-up-btn" @click="signUpMode = !signUpMode">注册</button>
           <div class="sign-up-text">敏于观察，勤于思考，善于综合，勇于创新。</div>
         </div>
-        <img src="@/assets/svg/log.svg" alt="" />
+
+        <SvgIcon :name="log"></SvgIcon>
       </div>
       <div class="desc-warp-item sign-in-desc">
         <div class="content">
@@ -57,8 +58,10 @@ import { useStore } from 'vuex';
 import { SignIn, SignUp } from '@/api/login.js';
 import { useRouter } from 'vue-router';
 import { SignInRules, signupState, SignUpRules } from './utils/rules';
+import SvgIcon from '../../components/SvgIcon/index.vue';
 export default {
   name: 'Login',
+  components: { SvgIcon },
   setup() {
     // 状态管理
     const store = useStore();
