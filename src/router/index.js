@@ -3,13 +3,16 @@ import { createRouter, createWebHashHistory } from 'vue-router';
 import Login from './modules/login';
 // 管理个人中心的路由
 import User from './modules/user';
+// 管理首页的路由
+import Home from './modules/home';
 
 const router = createRouter({
   history: createWebHashHistory(),
   routes: [
-    { path: '/', redirect: '/login' },
+    { path: '/', redirect: '/home' },
     ...Login,
     ...User,
+    ...Home,
     // ...redirect, // 统一的重定向配置
   ],
   scrollBehavior(to, from, savedPosition) {

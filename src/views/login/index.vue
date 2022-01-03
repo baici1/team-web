@@ -93,7 +93,7 @@ export default {
       // 保存storage
       store.commit('app/setToken', res.data.token);
       // 跳转页面
-      router.push('/user/home');
+      router.push('/home');
       loading.value = false;
     };
     // 注册提交功能
