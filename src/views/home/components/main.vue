@@ -81,11 +81,11 @@ numberAnimationInstRef.value?.play();
   display: flex;
   justify-content: center;
   align-items: center;
-  background: url('http://cxcygl.ctgu.edu.cn/api/uploads/1637748673653.png');
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
-  overflow: hidden;
+  // background: url('http://cxcygl.ctgu.edu.cn/api/uploads/1637748673653.png');
+  // background-position: center;
+  // background-size: cover;
+  // background-repeat: no-repeat;
+  // overflow: hidden;
 }
 
 .box-card {
