@@ -73,8 +73,8 @@
     <div class="Part" style="background: rgb(247, 249, 251)">
       <el-row justify="center">
         <el-col :xl="16" :xs="24">
-          <el-tabs v-model="activeName" @tab-click="handleClick">
-            <el-tab-pane label="蓝桥杯" name="first">
+          <el-tabs v-model="activeName">
+            <el-tab-pane label="热门文章" name="first">
               <el-scrollbar height="400px">
                 <n-thing v-for="item in pages" :key="item" content-indented>
                   <template #avatar>
@@ -93,63 +93,6 @@
                     </el-button>
                   </template>
                   <el-skeleton v-if="isPages" :rows="1" animated />
-                  {{ item.tips }}
-                </n-thing>
-              </el-scrollbar>
-            </el-tab-pane>
-            <el-tab-pane label="创新创业" name="second">
-              <el-scrollbar height="400px">
-                <n-thing v-for="item in pages" :key="item" content-indented>
-                  <template #avatar>
-                    <el-avatar shape="square" :size="50"
-                    src=https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png />
-                  </template>
-                  <template #header>{{ item.title }}</template>
-                  <template #header-extra>
-                    <el-button circle size="small">
-                      <el-icon>
-                        <more></more>
-                      </el-icon>
-                    </el-button>
-                  </template>
-                  {{ item.tips }}
-                </n-thing>
-              </el-scrollbar>
-            </el-tab-pane>
-            <el-tab-pane label="服创" name="third">
-              <el-scrollbar height="400px">
-                <n-thing v-for="item in pages" :key="item" content-indented>
-                  <template #avatar>
-                    <el-avatar shape="square" :size="50"
-                    src=https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png />
-                  </template>
-                  <template #header>{{ item.title }}</template>
-                  <template #header-extra>
-                    <el-button circle size="small">
-                      <el-icon>
-                        <more></more>
-                      </el-icon>
-                    </el-button>
-                  </template>
-                  {{ item.tips }}
-                </n-thing>
-              </el-scrollbar>
-            </el-tab-pane>
-            <el-tab-pane label="数学建模" name="fourth">
-              <el-scrollbar height="400px">
-                <n-thing v-for="item in pages" :key="item" content-indented>
-                  <template #avatar>
-                    <el-avatar shape="square" :size="50"
-                    src=https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png />
-                  </template>
-                  <template #header>{{ item.title }}</template>
-                  <template #header-extra>
-                    <el-button circle size="small">
-                      <el-icon>
-                        <more></more>
-                      </el-icon>
-                    </el-button>
-                  </template>
                   {{ item.tips }}
                 </n-thing>
               </el-scrollbar>
@@ -249,13 +192,13 @@ async function getPages(name) {
 getPages('first');
 
 // 标签页发起请求
-const handleClick = (tab, event) => {
-  isPages.value = true;
-  console.log('%c 🥪 event: ', 'font-size:20px;background-color: #ED9EC7;color:#fff;', tab.paneName);
-  getPages(tab.paneName);
-  isPages.value = false;
-  console.log(tab, event);
-};
+// const handleClick = (tab, event) => {
+//   isPages.value = true;
+//   console.log('%c 🥪 event: ', 'font-size:20px;background-color: #ED9EC7;color:#fff;', tab.paneName);
+//   getPages(tab.paneName);
+//   isPages.value = false;
+//   console.log(tab, event);
+// };
 </script>
 
 <style lang="scss" scoped>
