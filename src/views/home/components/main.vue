@@ -31,12 +31,13 @@
                 </div>
               </div>
             </template>
+            <el-empty v-if="show" description="No Data"></el-empty>
             <div v-for="item in news" :key="item" class="news-text">
               <el-link>
                 <span>{{ item.title }}</span>
               </el-link>
               <el-link>
-                <span style="max-width: 50px">{{ item.time }}</span>
+                <span style="color: #999999">{{ item.time }}</span>
               </el-link>
             </div>
           </el-card>
@@ -55,12 +56,13 @@
                 </div>
               </div>
             </template>
+            <el-empty v-if="show" description="No Data"></el-empty>
             <div v-for="item in news" :key="item" class="news-text">
               <el-link>
                 <span>{{ item.title }}</span>
               </el-link>
               <el-link>
-                <span>{{ item.time }}</span>
+                <span style="color: #999999">{{ item.time }}</span>
               </el-link>
             </div>
           </el-card>
@@ -68,11 +70,11 @@
       </el-row>
     </div>
     <!-- 数值显示 -->
-    <div class="Part1">
+    <div class="Part2">
       <div class="title">获奖总成绩成绩</div>
       <el-row justify="center">
         <el-col :xl="3" :xs="20">
-          <el-card class="box-card" shadow="hover">
+          <el-card class="score" shadow="hover">
             <template #header>
               <div>
                 <span>特等奖</span>
@@ -82,7 +84,7 @@
           </el-card>
         </el-col>
         <el-col :xl="3" :xs="20">
-          <el-card class="box-card" shadow="hover">
+          <el-card class="score" shadow="hover">
             <template #header>
               <div>
                 <span>国一</span>
@@ -92,7 +94,7 @@
           </el-card>
         </el-col>
         <el-col :xl="3" :xs="20">
-          <el-card class="box-card" shadow="hover">
+          <el-card class="score" shadow="hover">
             <template #header>
               <div>
                 <span>国二</span>
@@ -102,7 +104,7 @@
           </el-card>
         </el-col>
         <el-col :xl="3" :xs="20">
-          <el-card class="box-card" shadow="hover">
+          <el-card class="score" shadow="hover">
             <template #header>
               <div>
                 <span>国三</span>
@@ -113,10 +115,17 @@
         </el-col>
       </el-row>
     </div>
+    <div class="Part3">
+      <div class="title">优秀教师</div>
+      <el-row justify="center">
+        <el-col :xl="16" :xs="24"><teacher></teacher></el-col>
+      </el-row>
+    </div>
   </div>
 </template>
 
 <script setup>
+import Teacher from '@/components/teacher/index.vue';
 import { NNumberAnimation } from 'naive-ui';
 import { Carousel, Pagination, Slide } from 'vue3-carousel';
 import { GetNews } from '@/api/home';
@@ -125,16 +134,19 @@ import { ref } from 'vue';
 const numberAnimationInstRef = ref(null);
 numberAnimationInstRef.value?.play();
 
+// 公告和新闻显示
+const show = ref(true);
 let news = ref([]);
 let getNews = async () => {
   const { data } = await GetNews();
   console.log('%c 🥑 data: ', 'font-size:20px;background-color: #F5CE50;color:#fff;', data);
   news.value = data;
+  show.value = false;
 };
 getNews();
 </script>
 
-<style lang="scss" scope>
+<style lang="scss" scoped>
 .carousel__item {
   min-height: 400px;
   width: 100%;
@@ -152,8 +164,12 @@ getNews();
   // overflow: hidden;
 }
 
-.box-card {
+.score {
   text-align: center;
+  font-size: 30px;
+  span {
+    font-size: 28px;
+  }
 }
 .el-col {
   margin: 0 10px;
@@ -219,10 +235,13 @@ getNews();
   display: flex;
   justify-content: space-between;
   align-items: center;
-  span {
+  .el-link {
     margin: 5px 0;
     cursor: pointer;
   }
+}
+.Part2 {
+  margin: 20px 0;
 }
 @media screen and (max-width: 768px) {
   .el-col {

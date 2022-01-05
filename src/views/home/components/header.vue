@@ -23,7 +23,7 @@
 <script setup>
 // https://ismail9k.github.io/vue3-carousel/examples.html
 </script>
-<style lang="scss" scope>
+<style lang="scss" scoped>
 .top {
   width: 90%;
   height: 60px;
