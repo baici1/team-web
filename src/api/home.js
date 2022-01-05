@@ -6,3 +6,11 @@ export function GetNews() {
     method: 'get',
   });
 }
+
+export function GetPages(data) {
+  return request({
+    url: '/getPage',
+    method: 'post',
+    data,
+  });
+}

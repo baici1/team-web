@@ -12,7 +12,7 @@
         <div class="text-two">地址</div>
       </div>
     </div>
-    <el-divider></el-divider>
+    <el-divider border-style="color: rgba($color: #979797, $alpha: 0.2);"></el-divider>
     <div class="fo-bottom">京公网安备</div>
   </div>
 </template>

@@ -69,8 +69,98 @@
         </el-col>
       </el-row>
     </div>
+    <!-- 指导文章 -->
+    <div class="Part" style="background: rgb(247, 249, 251)">
+      <el-row justify="center">
+        <el-col :xl="16" :xs="24">
+          <el-tabs v-model="activeName" @tab-click="handleClick">
+            <el-tab-pane label="蓝桥杯" name="first">
+              <el-scrollbar height="400px">
+                <n-thing v-for="item in pages" :key="item" content-indented>
+                  <template #avatar>
+                    <el-avatar shape="square" :size="50"
+                    src=https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png />
+                  </template>
+                  <template #header>
+                    <el-skeleton v-if="isPages" :rows="0" animated />
+                    {{ item.title }}
+                  </template>
+                  <template #header-extra>
+                    <el-button circle size="small">
+                      <el-icon>
+                        <more></more>
+                      </el-icon>
+                    </el-button>
+                  </template>
+                  <el-skeleton v-if="isPages" :rows="1" animated />
+                  {{ item.tips }}
+                </n-thing>
+              </el-scrollbar>
+            </el-tab-pane>
+            <el-tab-pane label="创新创业" name="second">
+              <el-scrollbar height="400px">
+                <n-thing v-for="item in pages" :key="item" content-indented>
+                  <template #avatar>
+                    <el-avatar shape="square" :size="50"
+                    src=https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png />
+                  </template>
+                  <template #header>{{ item.title }}</template>
+                  <template #header-extra>
+                    <el-button circle size="small">
+                      <el-icon>
+                        <more></more>
+                      </el-icon>
+                    </el-button>
+                  </template>
+                  {{ item.tips }}
+                </n-thing>
+              </el-scrollbar>
+            </el-tab-pane>
+            <el-tab-pane label="服创" name="third">
+              <el-scrollbar height="400px">
+                <n-thing v-for="item in pages" :key="item" content-indented>
+                  <template #avatar>
+                    <el-avatar shape="square" :size="50"
+                    src=https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png />
+                  </template>
+                  <template #header>{{ item.title }}</template>
+                  <template #header-extra>
+                    <el-button circle size="small">
+                      <el-icon>
+                        <more></more>
+                      </el-icon>
+                    </el-button>
+                  </template>
+                  {{ item.tips }}
+                </n-thing>
+              </el-scrollbar>
+            </el-tab-pane>
+            <el-tab-pane label="数学建模" name="fourth">
+              <el-scrollbar height="400px">
+                <n-thing v-for="item in pages" :key="item" content-indented>
+                  <template #avatar>
+                    <el-avatar shape="square" :size="50"
+                    src=https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png />
+                  </template>
+                  <template #header>{{ item.title }}</template>
+                  <template #header-extra>
+                    <el-button circle size="small">
+                      <el-icon>
+                        <more></more>
+                      </el-icon>
+                    </el-button>
+                  </template>
+                  {{ item.tips }}
+                </n-thing>
+              </el-scrollbar>
+            </el-tab-pane>
+          </el-tabs>
+        </el-col>
+      </el-row>
+    </div>
+
     <!-- 数值显示 -->
-    <div class="Part2">
+    <div class="Part">
       <div class="title">获奖总成绩成绩</div>
       <el-row justify="center">
         <el-col :xl="3" :xs="20">
@@ -115,7 +205,7 @@
         </el-col>
       </el-row>
     </div>
-    <div class="Part3">
+    <div class="Part">
       <div class="title">优秀教师</div>
       <el-row justify="center">
         <el-col :xl="16" :xs="24"><teacher></teacher></el-col>
@@ -125,12 +215,14 @@
 </template>
 
 <script setup>
+import { More } from '@element-plus/icons-vue';
 import Teacher from '@/components/teacher/index.vue';
-import { NNumberAnimation } from 'naive-ui';
+import { NNumberAnimation, NThing } from 'naive-ui';
 import { Carousel, Pagination, Slide } from 'vue3-carousel';
-import { GetNews } from '@/api/home';
+import { GetNews, GetPages } from '@/api/home';
 import 'vue3-carousel/dist/carousel.css';
 import { ref } from 'vue';
+
 const numberAnimationInstRef = ref(null);
 numberAnimationInstRef.value?.play();
 
@@ -144,6 +236,26 @@ let getNews = async () => {
   show.value = false;
 };
 getNews();
+// 指导文章显示
+const activeName = ref('first');
+let isPages = ref(true);
+let pages = ref([]);
+// 显示默认文章
+async function getPages(name) {
+  const res = await GetPages({ name: `${name}` });
+  pages.value = res.data;
+  isPages.value = false;
+}
+getPages('first');
+
+// 标签页发起请求
+const handleClick = (tab, event) => {
+  isPages.value = true;
+  console.log('%c 🥪 event: ', 'font-size:20px;background-color: #ED9EC7;color:#fff;', tab.paneName);
+  getPages(tab.paneName);
+  isPages.value = false;
+  console.log(tab, event);
+};
 </script>
 
 <style lang="scss" scoped>
@@ -177,7 +289,7 @@ getNews();
 
 .title {
   text-align: center;
-  margin-bottom: 10px;
+  margin-bottom: 50px;
   color: rgba($color: #32bdfe, $alpha: 1);
   font-size: 28px;
 }
@@ -240,8 +352,17 @@ getNews();
     cursor: pointer;
   }
 }
-.Part2 {
-  margin: 20px 0;
+
+.Part {
+  overflow: hidden;
+  padding: 30px 0;
+  margin: 50px 0;
+}
+.n-thing {
+  border-bottom: 1px solid #d7d7d7;
+  padding-bottom: 20px;
+  margin-top: 10px;
+  margin-right: 15px;
 }
 @media screen and (max-width: 768px) {
   .el-col {
