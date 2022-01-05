@@ -148,8 +148,15 @@
         </el-col>
       </el-row>
     </div>
+    <!-- 优秀展示 -->
     <div class="Part">
       <div class="title">优秀教师</div>
+      <el-row justify="center">
+        <el-col :xl="16" :xs="24"><teacher></teacher></el-col>
+      </el-row>
+    </div>
+    <div class="Part">
+      <div class="title">优秀团队</div>
       <el-row justify="center">
         <el-col :xl="16" :xs="24"><teacher></teacher></el-col>
       </el-row>
