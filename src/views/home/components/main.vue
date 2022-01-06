@@ -26,7 +26,10 @@
                   <img src="https://static.lanqiao.cn/dasai/images/20210818/title/notice.png" />
                 </div>
                 <div class="nright">
-                  <el-button class="button" type="text">查看更多</el-button>
+                  <router-link :to="{ name: 'List', params: { id: 'news' } }">
+                    <el-button class="button" type="text">查看更多</el-button>
+                  </router-link>
+
                   <img src="https://static.lanqiao.cn/dasai/images/20210818/icons/yellow_right.png" alt="icons" />
                 </div>
               </div>

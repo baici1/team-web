@@ -25,7 +25,6 @@ export default [
     timeout: 1000,
     statusCode: 200,
     response: ({ body }) => {
-      console.log('%c 🍐 body: ', 'font-size:20px;background-color: #42b983;color:#fff;', body);
       let pages = [];
       for (let i = 0; i < 10; i++) {
         pages.push({
@@ -38,7 +37,29 @@ export default [
         code: 200,
         msg: '登录成功',
         data: pages,
-        name: `${body.name}`,
+      };
+    },
+  },
+  {
+    url: '/getlist',
+    method: 'post',
+    timeout: 1000,
+    statusCode: 200,
+    response: ({ body }) => {
+      console.log('%c 🥤 body: ', 'font-size:20px;background-color: #E41A6A;color:#fff;', body);
+
+      let pages = [];
+      for (let i = 0; i < body.num; i++) {
+        pages.push({
+          title: '@csentence()',
+          tips: '@cparagraph()',
+          time: '@date()',
+        });
+      }
+      return {
+        code: 200,
+        msg: '登录成功',
+        data: pages,
       };
     },
   },

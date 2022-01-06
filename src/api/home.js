@@ -14,3 +14,12 @@ export function GetPages(data) {
     data,
   });
 }
+export function GetList(data) {
+  return request({
+    url: '/getlist',
+    method: 'post',
+    data: {
+      num: data,
+    },
+  });
+}
