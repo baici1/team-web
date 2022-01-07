@@ -21,9 +21,11 @@
           </template>
           <template #header-extra>
             <el-button circle size="small">
-              <el-icon>
-                <more></more>
-              </el-icon>
+              <router-link :to="{ name: 'Details', params: { id: '123456789' } }">
+                <el-icon>
+                  <more></more>
+                </el-icon>
+              </router-link>
             </el-button>
           </template>
           <!-- <el-skeleton v-if="isPages" :rows="1" animated /> -->
