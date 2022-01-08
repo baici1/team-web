@@ -17,7 +17,7 @@
     <!-- 公告显示 -->
     <div class="news">
       <el-row justify="center">
-        <el-col :xl="8" :xs="20">
+        <el-col :xl="6" :span="8" :xs="20">
           <el-card class="news-card">
             <template #header>
               <div class="news-header">
@@ -40,12 +40,12 @@
                 <span>{{ item.title }}</span>
               </el-link>
               <el-link>
-                <span style="color: #999999">{{ item.time }}</span>
+                <span style="color: #999999" class="news-time">{{ item.time }}</span>
               </el-link>
             </div>
           </el-card>
         </el-col>
-        <el-col :xl="8" :xs="20">
+        <el-col :xl="6" :span="8" :xs="20">
           <el-card class="news-card">
             <template #header>
               <div class="news-header">
@@ -65,17 +65,42 @@
                 <span>{{ item.title }}</span>
               </el-link>
               <el-link>
-                <span style="color: #999999">{{ item.time }}</span>
+                <span style="color: #999999" class="news-time">{{ item.time }}</span>
+              </el-link>
+            </div>
+          </el-card>
+        </el-col>
+        <el-col :xl="6" :span="8" :xs="20">
+          <el-card class="news-card">
+            <template #header>
+              <div class="news-header">
+                <div class="nleft">
+                  <span>比赛通知</span>
+                  <img src="https://static.lanqiao.cn/dasai/images/20210818/title/news.png" />
+                </div>
+                <div class="nright">
+                  <el-button class="button" type="text">查看更多</el-button>
+                  <img src="https://static.lanqiao.cn/dasai/images/20210818/icons/yellow_right.png" alt="icons" />
+                </div>
+              </div>
+            </template>
+            <el-empty v-if="show" description="No Data"></el-empty>
+            <div v-for="item in news" :key="item" class="news-text">
+              <el-link>
+                <span>{{ item.title }}</span>
+              </el-link>
+              <el-link>
+                <span style="color: #999999" class="news-time">{{ item.time }}</span>
               </el-link>
             </div>
           </el-card>
         </el-col>
       </el-row>
     </div>
-    <!-- 指导文章 -->
+    <!-- 热门文章 -->
     <div class="Part" style="background: rgb(247, 249, 251)">
       <el-row justify="center">
-        <el-col :xl="16" :xs="24">
+        <el-col :xl="16" :lg="16" :md="16" :xs="24">
           <el-tabs v-model="activeName">
             <el-tab-pane label="热门文章" name="first">
               <el-scrollbar height="400px">
@@ -105,48 +130,47 @@
       </el-row>
     </div>
 
-    <!-- 数值显示 -->
+    <!-- 赛事状态 -->
     <div class="Part">
-      <div class="title">获奖总成绩成绩</div>
+      <div class="title">赛事时间表</div>
       <el-row justify="center">
-        <el-col :xl="3" :xs="20">
+        <el-col :xl="6" :span="6" :xs="20">
           <el-card class="score" shadow="hover">
             <template #header>
-              <div>
-                <span>特等奖</span>
+              <div class="card-header">
+                <span>正在报名赛事</span>
               </div>
             </template>
-            <n-number-animation ref="numberAnimationInstRef" :from="0" :to="12039"></n-number-animation>
+            <el-table :data="tableData" stripe style="width: 100%">
+              <el-table-column prop="date" label="比赛名称" align="center" />
+              <el-table-column prop="name" label="截止时间" align="center" />
+            </el-table>
           </el-card>
         </el-col>
-        <el-col :xl="3" :xs="20">
+        <el-col :xl="6" :span="6" :xs="20">
           <el-card class="score" shadow="hover">
             <template #header>
-              <div>
-                <span>国一</span>
+              <div class="card-header">
+                <span>正在进行赛事</span>
               </div>
             </template>
-            <n-number-animation ref="numberAnimationInstRef" :from="0" :to="12039"></n-number-animation>
+            <el-table :data="tableData" stripe style="width: 100%">
+              <el-table-column prop="date" label="Date" align="center" />
+              <el-table-column prop="name" label="Name" align="center" />
+            </el-table>
           </el-card>
         </el-col>
-        <el-col :xl="3" :xs="20">
+        <el-col :xl="6" :span="6" :xs="20">
           <el-card class="score" shadow="hover">
             <template #header>
-              <div>
-                <span>国二</span>
+              <div class="card-header">
+                <span>已经结束赛事</span>
               </div>
             </template>
-            <n-number-animation ref="numberAnimationInstRef" :from="0" :to="12039"></n-number-animation>
-          </el-card>
-        </el-col>
-        <el-col :xl="3" :xs="20">
-          <el-card class="score" shadow="hover">
-            <template #header>
-              <div>
-                <span>国三</span>
-              </div>
-            </template>
-            <n-number-animation ref="numberAnimationInstRef" :from="0" :to="12039"></n-number-animation>
+            <el-table :data="tableData" stripe style="width: 100%">
+              <el-table-column prop="date" label="Date" align="center" />
+              <el-table-column prop="name" label="Name" align="center" />
+            </el-table>
           </el-card>
         </el-col>
       </el-row>
@@ -155,13 +179,13 @@
     <div class="Part">
       <div class="title">优秀教师</div>
       <el-row justify="center">
-        <el-col :xl="16" :xs="24"><teacher></teacher></el-col>
+        <el-col :xl="16" :lg="16" :md="16" :xs="24"><teacher></teacher></el-col>
       </el-row>
     </div>
     <div class="Part">
       <div class="title">优秀团队</div>
       <el-row justify="center">
-        <el-col :xl="16" :xs="24"><teacher></teacher></el-col>
+        <el-col :xl="16" :lg="16" :md="16" :xs="24"><teacher></teacher></el-col>
       </el-row>
     </div>
   </div>
@@ -170,7 +194,7 @@
 <script setup>
 import { More } from '@element-plus/icons-vue';
 import Teacher from '@/components/teacher/index.vue';
-import { NNumberAnimation, NThing } from 'naive-ui';
+import { NThing } from 'naive-ui';
 import { Carousel, Pagination, Slide } from 'vue3-carousel';
 import { GetNews, GetPages } from '@/api/home';
 import 'vue3-carousel/dist/carousel.css';
@@ -209,11 +233,33 @@ getPages('first');
 //   isPages.value = false;
 //   console.log(tab, event);
 // };
+const tableData = [
+  {
+    date: '2016-05-03',
+    name: 'Tom',
+    address: 'No. 189, Grove St, Los Angeles',
+  },
+  {
+    date: '2016-05-02',
+    name: 'Tom',
+    address: 'No. 189, Grove St, Los Angeles',
+  },
+  {
+    date: '2016-05-04',
+    name: 'Tom',
+    address: 'No. 189, Grove St, Los Angeles',
+  },
+  {
+    date: '2016-05-01',
+    name: 'Tom',
+    address: 'No. 189, Grove St, Los Angeles',
+  },
+];
 </script>
 
 <style lang="scss" scoped>
 .carousel__item {
-  min-height: 400px;
+  min-height: 600px;
   width: 100%;
   background-color: var(--vc-clr-primary);
   color: var(--vc-clr-white);
@@ -308,7 +354,7 @@ getPages('first');
 
 .Part {
   overflow: hidden;
-  padding: 30px 0;
+  padding: 30px 10px;
   margin: 50px 0;
 }
 .n-thing {
@@ -316,6 +362,9 @@ getPages('first');
   padding-bottom: 20px;
   margin-top: 10px;
   margin-right: 15px;
+}
+.el-table {
+  margin: 0;
 }
 @media screen and (max-width: 768px) {
   .el-col {
@@ -327,6 +376,9 @@ getPages('first');
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+    }
+    .news-time {
+      display: none;
     }
   }
 }

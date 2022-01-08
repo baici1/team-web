@@ -8,8 +8,8 @@
       </div>
       <div class="fo-second">
         <div class="text-one">联系我们</div>
-        <div class="text-two">Email</div>
-        <div class="text-two">地址</div>
+        <div class="text-two">Email:249337001@qq.com</div>
+        <div class="text-two">地址:b3楼</div>
       </div>
     </div>
     <el-divider border-style="color: rgba($color: #979797, $alpha: 0.2);"></el-divider>
@@ -48,6 +48,11 @@
   }
   .el-divider {
     margin: 3px 0;
+  }
+}
+@media screen and (max-width: 768px) {
+  .footer .fo-top {
+    width: 93%;
   }
 }
 </style>
