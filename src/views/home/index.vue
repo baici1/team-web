@@ -28,7 +28,7 @@ import Footer from './components/footer.vue';
   align-content: center;
   flex-direction: column;
   width: 100%;
-  padding: 0;
+  padding: 10px 0;
 }
 .el-footer {
   padding: 0;

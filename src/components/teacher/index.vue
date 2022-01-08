@@ -1,5 +1,5 @@
 <template>
-  <Carousel :itemsToShow="3.95" :wrapAround="true">
+  <Carousel :itemsToShow="3.95" :wrapAround="true" :autoplay="2000">
     <Slide v-for="slide in 10" :key="slide">
       <div class="carousel_item">{{ slide }}</div>
     </Slide>
