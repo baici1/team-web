@@ -17,7 +17,7 @@
     <!-- 公告显示 -->
     <div class="news">
       <el-row justify="center">
-        <el-col :xl="6" :span="8" :xs="20">
+        <el-col :xl="6" :span="6" :xs="20">
           <el-card class="news-card">
             <template #header>
               <div class="news-header">
@@ -45,7 +45,7 @@
             </div>
           </el-card>
         </el-col>
-        <el-col :xl="6" :span="8" :xs="20">
+        <el-col :xl="6" :span="6" :xs="20">
           <el-card class="news-card">
             <template #header>
               <div class="news-header">
@@ -70,7 +70,7 @@
             </div>
           </el-card>
         </el-col>
-        <el-col :xl="6" :span="8" :xs="20">
+        <el-col :xl="6" :span="6" :xs="20">
           <el-card class="news-card">
             <template #header>
               <div class="news-header">
