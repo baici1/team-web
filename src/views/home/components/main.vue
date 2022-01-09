@@ -446,13 +446,13 @@ const activities = [
   overflow: hidden;
   padding: 30px 10px;
   position: relative;
-  background: rgba($color: #0091d7, $alpha: 0.7);
+  background: rgba($color: #ceecff, $alpha: 0.7);
 }
 
 .title {
   text-align: center;
   margin-bottom: 20px;
-  color: rgba($color: #fbf7ff, $alpha: 1);
+  color: rgba($color: #474554, $alpha: 1);
   font-size: 28px;
 }
 .icon-left {
