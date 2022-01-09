@@ -1,38 +1,70 @@
 <template>
   <el-container>
-    <el-header v-if="show" class="header-box">
+    <el-header class="header-box">
       <Header></Header>
     </el-header>
-    <el-main class="main-box" :style="{ height: h + 'px' }">
-      <el-row justify="center">
-        <el-col :span="12">
-          <div class="list-title">比赛</div>
-        </el-col>
-      </el-row>
-      <div v-infinite-scroll="load" class="scroll-box" :style="{ height: '100%' }" infinite-scroll-distance="100px">
-        <n-thing v-for="item in pages" :key="item" content-indented>
-          <template #avatar>
-            <el-avatar shape="square" :size="50" src=https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png
-            />
-          </template>
-          <template #header>
-            <!-- <el-skeleton v-if="isPages" :rows="0" animated /> -->
-            {{ item.title }}
-          </template>
-          <template #header-extra>
-            <el-button circle size="small">
-              <router-link :to="{ name: 'Details', params: { id: '123456789' } }">
-                <el-icon>
-                  <more></more>
-                </el-icon>
-              </router-link>
-            </el-button>
-          </template>
-          <!-- <el-skeleton v-if="isPages" :rows="1" animated /> -->
-          {{ item.tips }}
-        </n-thing>
-        <div v-loading="loading" class="load"></div>
-      </div>
+    <el-main class="main-box">
+      <el-scrollbar>
+        <el-row justify="center">
+          <el-col :span="24">
+            <Banner></Banner>
+          </el-col>
+        </el-row>
+        <el-row justify="center">
+          <el-col :span="16" :xs="22">
+            <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+              <el-menu-item index="1">Processing Center</el-menu-item>
+              <el-menu-item index="4">Orders</el-menu-item>
+            </el-menu>
+            <!-- <n-tabs default-value="signin" size="large">
+              <n-tab-pane name="signin" tab="登录">DENGLU </n-tab-pane>
+              <n-tab-pane name="signup" tab="注册"> ZHUVC</n-tab-pane>
+            </n-tabs> -->
+          </el-col>
+        </el-row>
+        <el-row justify="center" style="background: rgb(242, 242, 242)">
+          <el-col :span="14" :xs="22">
+            <a-list item-layout="vertical" :data-source="data" class="game-list">
+              <template #renderItem="{ item }">
+                <el-card class="game-card">
+                  <a-list-item>
+                    <a-list-item-meta>
+                      <template #title>
+                        <a href="https://www.antdv.com/" class="game-item-title">
+                          {{ item.title }}
+                          <el-tag type="success" size="small" style="margin-left: 5px">{{ item.tag }}</el-tag>
+                        </a>
+                        <div>
+                          <p style="font-size: 14px; color: rgb(102, 102, 102); max-width: 95%">
+                            {{ item.describe }}
+                          </p>
+                          <p style="margin-top: 6px; font-size: 12px; color: rgb(136, 136, 136)">
+                            报名时间： {{ item.startTime }}<el-divider direction="vertical"></el-divider> 截止时间：{{
+                              item.startTime
+                            }}
+                          </p>
+                        </div>
+                      </template>
+                      <template #avatar>
+                        <a-avatar
+                          shape="square"
+                          src="https://ali-cdn.educoder.net/images/avatars/Competition/3?t=1591925435"
+                          class="game-item-img"
+                        />
+                      </template>
+                    </a-list-item-meta>
+                    <template #extra>
+                      <div class="game-extra">
+                        <el-button :disabled="item.isdisabled">参与报名</el-button>
+                      </div>
+                    </template>
+                  </a-list-item>
+                </el-card>
+              </template>
+            </a-list>
+          </el-col>
+        </el-row>
+      </el-scrollbar>
     </el-main>
     <!-- <el-footer>
       <Footer></Footer>
@@ -41,13 +73,14 @@
 </template>
 <script setup>
 import Header from '@/views/home/components/header.vue';
-import { NThing } from 'naive-ui';
-import { More } from '@element-plus/icons-vue';
+// import { NTabs, NTabPane } from 'naive-ui';
+// import { More } from '@element-plus/icons-vue';
 import { ref } from 'vue';
 import { useRoute } from 'vue-router';
 const route = useRoute();
 console.log('%c 🥖 router: ', 'font-size:20px;background-color: #FFDD4D;color:#fff;', route.params.id);
 import { GetList } from '@/api/home';
+import Banner from './components/banner.vue';
 
 // 获取文章列表
 const pages = ref([]);
@@ -57,24 +90,46 @@ async function getlist(num) {
   pages.value.push(...res.data);
 }
 getlist(10);
-// 当用户滚动到最下面时候，进行加载
-let loading = ref(true);
-const load = () => {
-  setTimeout(() => {
-    loading.value = true;
-  }, 2000);
-  console.log('%c 🍪 loading.value: ', 'font-size:20px;background-color: #3F7CFF;color:#fff;', loading.value);
-  getlist(2);
-  loading.value = false;
+
+const activeIndex = ref('1');
+const handleSelect = (key, keyPath) => {
+  console.log(key, keyPath);
 };
-// 获取屏幕高度，处理无限滚动bug
-const scroll_height = document.documentElement.clientHeight;
-let h = ref(scroll_height - 70);
-let show = ref(true);
-if (document.documentElement.clientWidth <= 768) {
-  h.value = scroll_height;
-  show.value = false;
-}
+const data = [
+  {
+    title: '全国高校绿色计算大赛',
+    tag: '正在进行中',
+    describe:
+      '开源项目创新赛聚焦发起或参与开源项目创新开发，设计了命题组和自由组两个组别，其中命题组为参赛团队参与指定开源项目进行贡献。',
+    startTime: '2021-03-31',
+    endTime: '2021-11-30 00:00:00',
+    isdisabled: true,
+  },
+  {
+    title: '全国高校绿色计算大赛',
+    tag: '正在进行中',
+    describe:
+      '开源项目创新赛聚焦发起或参与开源项目创新开发，设计了命题组和自由组两个组别，其中命题组为参赛团队参与指定开源项目进行贡献。',
+    startTime: '2021-03-31',
+    endTime: '2021-11-30 00:00:00',
+  },
+  {
+    title: '全国高校绿色计算大赛',
+    tag: '正在进行中',
+    describe:
+      '开源项目创新赛聚焦发起或参与开源项目创新开发，设计了命题组和自由组两个组别，其中命题组为参赛团队参与指定开源项目进行贡献。',
+    startTime: '2021-03-31',
+    endTime: '2021-11-30 00:00:00',
+  },
+  {
+    title: '全国高校绿色计算大赛',
+    tag: '正在进行中',
+    describe:
+      '开源项目创新赛聚焦发起或参与开源项目创新开发，设计了命题组和自由组两个组别，其中命题组为参赛团队参与指定开源项目进行贡献。',
+    startTime: '2021-03-31',
+    endTime: '2021-11-30 00:00:00',
+  },
+];
 </script>
 
 <style lang="scss" scoped>
@@ -87,39 +142,51 @@ if (document.documentElement.clientWidth <= 768) {
 .main-box {
   width: 100%;
   padding: 0;
+  //  background-color: rgb(242, 242, 242);
 }
 .el-footer {
   padding: 0;
   margin: 0;
   margin-top: 50px;
 }
-.scroll-box {
-  width: 70%;
-  padding: 0;
-  margin: 0 auto;
-  list-style: none;
+
+.el-menu-demo {
+  border: none;
 }
-.n-thing {
-  border-bottom: 1px solid #d7d7d7;
-  padding-bottom: 20px;
-  margin-top: 10px;
-  margin-right: 15px;
-}
-.list-title {
-  text-align: center;
-  font-size: 30px;
-  font-weight: 600;
-}
-.load {
-  width: 100%;
-  height: 300px;
+.game-list {
+  margin-top: 20px;
+  .game-card {
+    margin: 20px 0;
+    border-radius: 5px;
+    .el-card__body {
+      padding: 0;
+    }
+    .game-item-title {
+      font-size: 20px;
+      color: #05101a;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      max-width: 80%;
+    }
+    .game-item-img {
+      width: 200px;
+      height: 100px;
+      border-radius: 5px;
+    }
+  }
 }
 @media screen and (max-width: 768px) {
-  .scroll-box {
-    width: 100%;
-    padding: 0;
-    margin: 0 auto;
-    list-style: none;
+  .game-list {
+    margin-top: 20px;
+    .game-card {
+      .game-item-img {
+        display: none;
+        width: 100px;
+        height: 50px;
+        border-radius: 5px;
+      }
+    }
   }
 }
 </style>

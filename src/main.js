@@ -4,7 +4,6 @@ import App from './App.vue';
 import store from './store';
 // 引入路由
 import router from './router';
-import ElementPlus from 'element-plus';
 import 'element-plus/dist/index.css';
 // 引入svg图标注册脚本
 import 'vite-plugin-svg-icons/register';
@@ -15,4 +14,4 @@ const app = createApp(App);
 Object.entries(Components).forEach(([key, component]) => {
   app.component(key, component);
 }); // 参数对象自身的（不含继承的）所有可遍历（enumerable）属性的键值对数组
-app.use(store).use(router).use(ElementPlus).mount('#app');
+app.use(store).use(router).mount('#app');

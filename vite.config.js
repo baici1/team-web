@@ -8,17 +8,17 @@ import viteSvgIcons from 'vite-plugin-svg-icons';
 // 导入elementui
 import AutoImport from 'unplugin-auto-import/vite';
 import Components from 'unplugin-vue-components/vite';
-import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
+import { ElementPlusResolver, AntDesignVueResolver } from 'unplugin-vue-components/resolvers';
 // https://vitejs.dev/config/
 export default (env) => {
   return defineConfig({
     plugins: [
       vue(),
       AutoImport({
-        resolvers: [ElementPlusResolver()],
+        resolvers: [ElementPlusResolver(), AntDesignVueResolver()],
       }),
       Components({
-        resolvers: [ElementPlusResolver()],
+        resolvers: [ElementPlusResolver(), AntDesignVueResolver()],
       }),
       viteSvgIcons({
         // 指定需要缓存的图标文件夹
