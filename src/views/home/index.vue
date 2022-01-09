@@ -27,13 +27,13 @@ import Footer from './components/footer.vue';
   display: flex;
   align-content: center;
   flex-direction: column;
+  background-color: rgb(242, 242, 242);
   width: 100%;
-  padding: 10px 0;
+  padding: 10px 0 0;
 }
 .el-footer {
   padding: 0;
   margin: 0;
-  margin-top: 50px;
 }
 @media screen and (max-width: 768px) {
 }

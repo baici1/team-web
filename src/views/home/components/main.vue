@@ -223,12 +223,12 @@
       <el-row justify="center">
         <el-col :xl="16" :lg="16" :md="16" :xs="24"><teacher></teacher></el-col>
       </el-row>
-    </div>
-    <div class="Part">
       <div class="title">优秀团队</div>
       <el-row justify="center">
         <el-col :xl="16" :lg="16" :md="16" :xs="24"><teacher></teacher></el-col>
       </el-row>
+      <svg-icon name="undraw_tree_swing_re_pqee" class="icon-left"></svg-icon>
+      <svg-icon name="undraw_well_done_i2wr" class="icon-right"></svg-icon>
     </div>
   </div>
 </template>
@@ -300,6 +300,31 @@ const activities = [
     content: 'Custom color',
     timestamp: '2018-04-03 20:46',
     color: '#0bbd87',
+  },
+  {
+    content: 'Custom color',
+    timestamp: '2018-04-03 20:46',
+    color: '#4336CF',
+  },
+  {
+    content: 'Custom color',
+    timestamp: '2018-04-03 20:46',
+    color: '#4336CF',
+  },
+  {
+    content: 'Custom color',
+    timestamp: '2018-04-03 20:46',
+    color: '#4336CF',
+  },
+  {
+    content: 'Custom color',
+    timestamp: '2018-04-03 20:46',
+    color: '#4336CF',
+  },
+  {
+    content: 'Custom color',
+    timestamp: '2018-04-03 20:46',
+    color: '#4336CF',
   },
   {
     content: 'Custom color',
@@ -420,11 +445,41 @@ const activities = [
 .Part {
   overflow: hidden;
   padding: 30px 10px;
+  position: relative;
+  background: rgba($color: #0091d7, $alpha: 0.7);
 }
+
 .title {
   text-align: center;
   margin-bottom: 20px;
-  color: rgba($color: #32bdfe, $alpha: 1);
+  color: rgba($color: #fbf7ff, $alpha: 1);
   font-size: 28px;
+}
+.icon-left {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  top: 50%;
+  left: 3%;
+  transform: translateY(-50%);
+}
+.icon-right {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  top: 47%;
+  right: 2%;
+  transform: translateY(-50%);
+}
+@media screen and (max-width: 768px) {
+  .news-time {
+    display: none;
+  }
+  .icon-left {
+    display: none;
+  }
+  .icon-right {
+    display: none;
+  }
 }
 </style>

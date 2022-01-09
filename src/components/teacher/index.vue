@@ -12,8 +12,8 @@ import 'vue3-carousel/dist/carousel.css';
 </script>
 <style lang="scss" scoped>
 .carousel_item {
-  min-height: 200px;
-  width: 100%;
+  min-height: 150px;
+  width: 75%;
   background-color: var(--vc-clr-primary);
   color: var(--vc-clr-white);
   font-size: 20px;
