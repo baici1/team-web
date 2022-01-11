@@ -39,9 +39,9 @@
                             {{ item.describe }}
                           </p>
                           <p style="margin-top: 6px; font-size: 12px; color: rgb(136, 136, 136)">
-                            报名时间： {{ item.startTime }}<el-divider direction="vertical"></el-divider> 截止时间：{{
-                              item.startTime
-                            }}
+                            报名时间： {{ item.startTime }}
+                            <el-divider direction="vertical"></el-divider>
+                            截止时间：{{ item.startTime }}
                           </p>
                         </div>
                       </template>

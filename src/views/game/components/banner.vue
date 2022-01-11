@@ -1,16 +1,24 @@
 <template>
   <div class="banner">
-    <div class="banner_title">
-      <h1>创新创业官网</h1>
-      <h3>找出一片属于自己的天地</h3>
-    </div>
-    <n-input size="large" round placeholder="查询比赛" class="input">
-      <template #prefix>
-        <el-icon>
-          <Search />
-        </el-icon>
-      </template>
-    </n-input>
+    <el-row justify="center">
+      <el-col :span="16" :xs="22">
+        <div class="banner_title">
+          <h1>创新创业官网</h1>
+          <h3>找出一片属于自己的天地</h3>
+        </div>
+      </el-col>
+    </el-row>
+    <el-row justify="center">
+      <el-col :span="12" :xs="22">
+        <n-input size="large" round placeholder="查询比赛">
+          <template #prefix>
+            <el-icon>
+              <Search />
+            </el-icon>
+          </template>
+        </n-input>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -28,16 +36,14 @@ import { NInput } from 'naive-ui';
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
-  .input {
-    width: 46%;
-  }
 }
 .banner_title {
   padding-bottom: 30px;
   text-align: center;
   h1 {
     margin: 0;
+    font-size: 28px;
+    font-weight: 800;
   }
   h3 {
     margin: 0;
@@ -46,11 +52,7 @@ import { NInput } from 'naive-ui';
     color: #828282;
   }
 }
-@media screen and (max-width: 768px) {
-  .banner {
-    .input {
-      width: 80%;
-    }
-  }
+.el-icon {
+  cursor: pointer;
 }
 </style>

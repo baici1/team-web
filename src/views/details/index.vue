@@ -5,7 +5,7 @@
     </el-header>
     <el-main class="main-box">
       <el-row justify="center">
-        <el-col :span="16">
+        <el-col :span="16" :xs="22">
           <div class="title">
             <div class="title1">关于公示2021年秋季学期教授为本科生上课信息的通知</div>
             <div class="title1">教通字〔2022〕3号</div>
@@ -17,7 +17,7 @@
         </el-col>
       </el-row>
       <el-row justify="center">
-        <el-col :span="16">
+        <el-col :span="16" :xs="22">
           <div class="main-text">
             <div>
               各学院： 为落实教授为本科生上课制度，现将公示教授为本科生上课信息的有关事项通知如下：
@@ -81,7 +81,7 @@ import Footer from '@/views/home/components/footer.vue';
   }
 }
 .main-text {
-  height: 100%;
+  min-height: 500px;
   padding: 0 20px;
 }
 @media screen and (max-width: 768px) {

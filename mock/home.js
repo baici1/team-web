@@ -10,6 +10,7 @@ export default [
         news.push({
           title: '@csentence()',
           time: '@date()',
+          id: '1',
         });
       }
       return {

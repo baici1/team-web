@@ -51,7 +51,7 @@ img {
   justify-content: center;
   align-items: center;
   .top-box {
-    width: 48px;
+    width: 60px;
     padding: 0 15px;
     text-align: center;
   }

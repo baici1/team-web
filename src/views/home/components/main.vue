@@ -27,7 +27,7 @@
                         <!-- <img src="https://static.lanqiao.cn/dasai/images/20210818/title/notice.png" /> -->
                       </div>
                       <div class="nright">
-                        <router-link :to="{ name: 'List', params: { id: 'news' } }">
+                        <router-link :to="{ name: 'List', params: { position: 'one' }, query: { id: '123' } }">
                           <el-button class="button" type="text">查看更多</el-button>
                         </router-link>
 
@@ -37,7 +37,7 @@
                   </template>
                   <el-empty v-if="show" description="No Data"></el-empty>
                   <div v-for="item in news" :key="item" class="news-text">
-                    <el-link>
+                    <el-link @click="ToDetail(item.id)">
                       <span>{{ item.title }}</span>
                     </el-link>
                     <el-link>
@@ -74,63 +74,6 @@
                   </div>
                 </el-card>
               </el-col>
-
-              <!-- <el-col :span="12" :xs="24">
-                <el-card class="news-card">
-                  <template #header>
-                    <div class="news-header">
-                      <div class="nleft">
-                        <span>日常公告</span>
-                        <img src="https://static.lanqiao.cn/dasai/images/20210818/title/notice.png" />
-                      </div>
-                      <div class="nright">
-                        <router-link :to="{ name: 'List', params: { id: 'news' } }">
-                          <el-button class="button" type="text">查看更多</el-button>
-                        </router-link>
-
-                        <img src="https://static.lanqiao.cn/dasai/images/20210818/icons/yellow_right.png" alt="icons" />
-                      </div>
-                    </div>
-                  </template>
-                  <el-empty v-if="show" description="No Data"></el-empty>
-                  <div v-for="item in news" :key="item" class="news-text">
-                    <el-link>
-                      <span>{{ item.title }}</span>
-                    </el-link>
-                    <el-link>
-                      <span style="color: #999999" class="news-time">{{ item.time }}</span>
-                    </el-link>
-                  </div>
-                </el-card>
-              </el-col>
-              <el-col :span="12" :xs="24">
-                <el-card class="news-card">
-                  <template #header>
-                    <div class="news-header">
-                      <div class="nleft">
-                        <span>日常公告</span>
-                        <img src="https://static.lanqiao.cn/dasai/images/20210818/title/notice.png" />
-                      </div>
-                      <div class="nright">
-                        <router-link :to="{ name: 'List', params: { id: 'news' } }">
-                          <el-button class="button" type="text">查看更多</el-button>
-                        </router-link>
-
-                        <img src="https://static.lanqiao.cn/dasai/images/20210818/icons/yellow_right.png" alt="icons" />
-                      </div>
-                    </div>
-                  </template>
-                  <el-empty v-if="show" description="No Data"></el-empty>
-                  <div v-for="item in news" :key="item" class="news-text">
-                    <el-link>
-                      <span>{{ item.title }}</span>
-                    </el-link>
-                    <el-link>
-                      <span style="color: #999999" class="news-time">{{ item.time }}</span>
-                    </el-link>
-                  </div>
-                </el-card>
-              </el-col> -->
             </el-row>
             <el-row justify="space-between" :gutter="20">
               <el-col :span="12" :xs="24">
@@ -145,7 +88,7 @@
                         <!-- <img src="https://static.lanqiao.cn/dasai/images/20210818/title/notice.png" /> -->
                       </div>
                       <div class="nright">
-                        <router-link :to="{ name: 'List', params: { id: 'news' } }">
+                        <router-link :to="{ name: 'Game', params: { id: 'news' } }">
                           <el-button class="button" type="text">查看更多</el-button>
                         </router-link>
 
@@ -211,7 +154,9 @@
                 :hollow="activity.hollow"
                 :timestamp="activity.timestamp"
               >
-                {{ activity.content }}
+                <el-link @click="toLink(activity.id)">
+                  {{ activity.content }}
+                </el-link>
               </el-timeline-item>
             </el-timeline>
           </el-scrollbar>
@@ -239,6 +184,8 @@ import { GetNews } from '@/api/home';
 import { ref } from 'vue';
 import { DataAnalysis, Goods } from '@element-plus/icons-vue';
 import SvgIcon from '../../../components/SvgIcon/index.vue';
+import { useRouter } from 'vue-router';
+const router = useRouter();
 // 公告和新闻显示
 const show = ref(true);
 let news = ref([]);
@@ -252,9 +199,29 @@ getNews();
 // 时间轴
 const activities = [
   {
+    content: '近一年度',
+    timestamp: '2021-01-01~2022-01-01',
+    color: '#00C9C8',
+    icon: 'el-icon-more',
+    id: 123,
+  },
+  {
     content: '全国大学生电子商务“创新、创意、创业”挑战赛',
     timestamp: '2018-04-03 20:46',
     color: '#C25E67',
+    id: '123',
+  },
+  {
+    content: 'Custom color',
+    timestamp: '2018-04-03 20:46',
+    color: '#C25E67',
+    id: '123',
+  },
+  {
+    content: 'Custom color',
+    timestamp: '2018-04-03 20:46',
+    color: '#C25E67',
+    id: '123',
   },
   {
     content: 'Custom color',
@@ -264,16 +231,6 @@ const activities = [
   {
     content: 'Custom color',
     timestamp: '2018-04-03 20:46',
-    color: '#C25E67',
-  },
-  {
-    content: 'Custom color',
-    timestamp: '2018-04-03 20:46',
-    color: '#C25E67',
-  },
-  {
-    content: 'Custom color',
-    timestamp: '2018-04-03 20:46',
     color: '#0bbd87',
   },
   {
@@ -300,16 +257,6 @@ const activities = [
     content: 'Custom color',
     timestamp: '2018-04-03 20:46',
     color: '#0bbd87',
-  },
-  {
-    content: 'Custom color',
-    timestamp: '2018-04-03 20:46',
-    color: '#4336CF',
-  },
-  {
-    content: 'Custom color',
-    timestamp: '2018-04-03 20:46',
-    color: '#4336CF',
   },
   {
     content: 'Custom color',
@@ -352,6 +299,13 @@ const activities = [
     color: '#4336CF',
   },
 ];
+// 跳转页面
+function toLink(id) {
+  router.push(`/game/${id}`);
+}
+function ToDetail(id) {
+  router.push(`/details/${id}`);
+}
 </script>
 <style lang="scss" scoped>
 .carousel__item {
