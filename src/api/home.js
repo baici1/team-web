@@ -1,15 +1,15 @@
 import request from '@/utils/request';
 
-export function GetNews() {
+export function GetShowSwiper() {
   return request({
-    url: '/getNews',
+    url: '/home/swiper/getlist',
     method: 'get',
   });
 }
 
-export function GetPages(data) {
+export function GetSpecificArticles(data) {
   return request({
-    url: '/getPage',
+    url: '/home/article/search',
     method: 'post',
     data,
   });

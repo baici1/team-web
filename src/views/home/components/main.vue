@@ -5,8 +5,13 @@
         <div class="Main-left">
           <!-- 轮播图 -->
           <Carousel :autoplay="2000" :wrap-around="true">
-            <Slide v-for="slide in 5" :key="slide">
-              <div class="carousel__item">{{ slide }}</div>
+            <Slide v-for="swiper in Swipers" :key="swiper">
+              <!-- <div class="carousel__item" :style="{ backgroundImage: `url(${swiper.swiper_picture})` }"></div> -->
+              <el-image class="carousel__item" :src="swiper.swiper_picture">
+                <template #error>
+                  <SvgIcon name="undraw_page_not_found_re_e9o6" class="img-error"></SvgIcon>
+                </template>
+              </el-image>
             </Slide>
             <template #addons>
               <Pagination />
@@ -22,7 +27,7 @@
                       <div class="nleft">
                         <span>
                           <SvgIcon name="bar-chart-2-line"></SvgIcon>
-                          热门文章
+                          双创活动
                         </span>
                         <!-- <img src="https://static.lanqiao.cn/dasai/images/20210818/title/notice.png" /> -->
                       </div>
@@ -35,13 +40,15 @@
                       </div>
                     </div>
                   </template>
-                  <el-empty v-if="show" description="No Data"></el-empty>
-                  <div v-for="item in news" :key="item" class="news-text">
+                  <el-empty v-if="show[0]" description="No Data"></el-empty>
+                  <div v-for="item in articles[0]" :key="item" class="news-text">
                     <el-link @click="ToDetail(item.id)">
-                      <span>{{ item.title }}</span>
+                      <n-ellipsis style="max-width: 350px">
+                        {{ item.title }}
+                      </n-ellipsis>
                     </el-link>
                     <el-link>
-                      <span style="color: #999999" class="news-time">{{ item.time }}</span>
+                      <span style="color: #999999" class="news-time">{{ timeFormat(item.create_time) }}</span>
                     </el-link>
                   </div>
                 </el-card>
@@ -63,13 +70,15 @@
                       </div>
                     </div>
                   </template>
-                  <el-empty v-if="show" description="No Data"></el-empty>
-                  <div v-for="item in news" :key="item" class="news-text">
+                  <el-empty v-if="show[1]" description="No Data"></el-empty>
+                  <div v-for="item in articles[1]" :key="item" class="news-text">
                     <el-link>
-                      <span>{{ item.title }}</span>
+                      <n-ellipsis style="max-width: 350px">
+                        {{ item.title }}
+                      </n-ellipsis>
                     </el-link>
                     <el-link>
-                      <span style="color: #999999" class="news-time">{{ item.time }}</span>
+                      <span style="color: #999999" class="news-time">{{ timeFormat(item.create_time) }}</span>
                     </el-link>
                   </div>
                 </el-card>
@@ -96,13 +105,15 @@
                       </div>
                     </div>
                   </template>
-                  <el-empty v-if="show" description="No Data"></el-empty>
-                  <div v-for="item in news" :key="item" class="news-text">
+                  <el-empty v-if="show[2]" description="No Data"></el-empty>
+                  <div v-for="item in articles[2]" :key="item" class="news-text">
                     <el-link>
-                      <span>{{ item.title }}</span>
+                      <n-ellipsis style="max-width: 350px">
+                        {{ item.title }}
+                      </n-ellipsis>
                     </el-link>
                     <el-link>
-                      <span style="color: #999999" class="news-time">{{ item.time }}</span>
+                      <span style="color: #999999" class="news-time">{{ timeFormat(item.create_time) }}</span>
                     </el-link>
                   </div>
                 </el-card>
@@ -124,13 +135,15 @@
                       </div>
                     </div>
                   </template>
-                  <el-empty v-if="show" description="No Data"></el-empty>
-                  <div v-for="item in news" :key="item" class="news-text">
+                  <el-empty v-if="show[3]" description="No Data"></el-empty>
+                  <div v-for="item in articles[3]" :key="item" class="news-text">
                     <el-link>
-                      <span>{{ item.title }}</span>
+                      <n-ellipsis style="max-width: 350px">
+                        {{ item.title }}
+                      </n-ellipsis>
                     </el-link>
                     <el-link>
-                      <span style="color: #999999" class="news-time">{{ item.time }}</span>
+                      <span style="color: #999999" class="news-time">{{ timeFormat(item.create_time) }}</span>
                     </el-link>
                   </div>
                 </el-card>
@@ -178,24 +191,48 @@
   </div>
 </template>
 <script setup>
+import { ElMessage } from 'element-plus';
 import { Carousel, Pagination, Slide } from 'vue3-carousel';
 import 'vue3-carousel/dist/carousel.css';
-import { GetNews } from '@/api/home';
+import { GetShowSwiper, GetSpecificArticles } from '@/api/home';
 import { ref } from 'vue';
 import { DataAnalysis, Goods } from '@element-plus/icons-vue';
-import SvgIcon from '../../../components/SvgIcon/index.vue';
+import SvgIcon from '@/components/SvgIcon/index.vue';
 import { useRouter } from 'vue-router';
+import { timeFormat } from '@/utils/day.js';
+import { NEllipsis } from 'naive-ui';
 const router = useRouter();
-// 公告和新闻显示
-const show = ref(true);
-let news = ref([]);
-let getNews = async () => {
-  const { data } = await GetNews();
-  console.log('%c 🥑 data: ', 'font-size:20px;background-color: #F5CE50;color:#fff;', data);
-  news.value = data;
-  show.value = false;
+// 获取轮播图
+const show = ref([true, true, true, true]);
+let Swipers = ref([]);
+let getSwipers = async () => {
+  try {
+    const { data } = await GetShowSwiper();
+    console.log('%c 🥑 data: ', 'font-size:20px;background-color: #F5CE50;color:#fff;', data);
+    Swipers.value = data;
+  } catch ({ response }) {
+    ElMessage.error(response.data.msg);
+  }
 };
-getNews();
+getSwipers();
+// 获取各类文章
+// 参数
+let artparam = ref({
+  page: 1,
+  limit: 10,
+  type: '',
+});
+let articles = ref([]);
+async function getArticles(type) {
+  for (let i = 0; i < 4; i++) {
+    artparam.value.type = type[i];
+    const { data } = await GetSpecificArticles(artparam.value);
+    console.log('%c 🍨 res: ', 'font-size:20px;background-color: #6EC1C2;color:#fff;', data);
+    articles.value.push(data);
+    show.value[articles.value.length - 1] = false;
+  }
+}
+getArticles(['双创活动', '新闻动态', '通知公告', '政策文件']);
 // 时间轴
 const activities = [
   {
@@ -309,7 +346,8 @@ function ToDetail(id) {
 </script>
 <style lang="scss" scoped>
 .carousel__item {
-  min-height: 300px;
+  height: 300px;
+  // min-height: 300px;
   width: 100%;
   background-color: var(--vc-clr-primary);
   color: var(--vc-clr-white);
@@ -318,7 +356,10 @@ function ToDetail(id) {
   display: flex;
   justify-content: center;
   align-items: center;
-  // background: url('http://cxcygl.ctgu.edu.cn/api/uploads/1637748673653.png');
+  .img-error {
+    height: 300px;
+    width: 100%;
+  }
   // background-position: center;
   // background-size: cover;
   // background-repeat: no-repeat;
@@ -378,6 +419,7 @@ function ToDetail(id) {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  overflow: hidden;
   .el-link {
     margin: 5px 0;
     cursor: pointer;
