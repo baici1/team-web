@@ -4,8 +4,8 @@
       <!-- 登录相关表单 -->
       <el-form ref="SignInFormRef" :model="signinState" class="sign-in-form" :rules="signinRules" status-icon>
         <h2 class="form-title">登录</h2>
-        <el-form-item name="stuid" prop="stuid">
-          <el-input v-model="signinState.stuid" class="sign-in-input" placeholder="输入学号" />
+        <el-form-item name="phone" prop="phone">
+          <el-input v-model="signinState.phone" class="sign-in-input" placeholder="输入手机号" />
         </el-form-item>
         <el-form-item name="password" prop="password">
           <el-input v-model="signinState.password" type="password" class="sign-in-input" placeholder="输入密码" />
@@ -15,15 +15,15 @@
         <el-button type="primary" class="submit-btn" :loading="loading" @click="signin"> 登录 </el-button>
       </el-form>
       <!-- 注册相关表单 -->
-      <el-form ref="SignUpFormRef" :model="signupState" class="sign-up-form" :rules="signupRules">
+      <el-form ref="SignUpFormRef" :model="signupState" class="sign-up-form" :rules="signupRules" status-icon>
         <h2 class="form-title">注册</h2>
-        <el-form-item name="stuId" hasFeedback>
-          <el-input v-model="signupState.stuId" class="sign-in-input" placeholder="输入学号" />
+        <el-form-item hasFeedback prop="phone">
+          <el-input v-model="signupState.phone" class="sign-in-input" placeholder="输入手机号" />
         </el-form-item>
-        <el-form-item name="password1" hasFeedback>
-          <el-input v-model="signupState.password1" type="password" class="sign-in-input" placeholder="输入密码" />
+        <el-form-item hasFeedback prop="password">
+          <el-input v-model="signupState.password" type="password" class="sign-in-input" placeholder="输入密码" />
         </el-form-item>
-        <el-form-item name="password2" hasFeedback>
+        <el-form-item hasFeedback prop="password2">
           <el-input v-model="signupState.password2" type="password" class="sign-in-input" placeholder="确认密码" />
         </el-form-item>
         <el-button class="submit-btn" @click="signup">立即注册</el-button>
@@ -57,6 +57,7 @@ import { useStore } from 'vuex';
 import { SignIn, SignUp } from '@/api/login.js';
 import { useRouter } from 'vue-router';
 import { SignInRules, signupState, SignUpRules } from './utils/rules';
+// import to from 'await-to-js';
 export default {
   name: 'Login',
   setup() {
@@ -71,8 +72,8 @@ export default {
     const SignUpFormRef = ref();
     // 表单数据
     const signinState = ref({
-      stuid: '',
-      password: '',
+      phone: '',
+      password: '123456',
     });
     // 表单验证规则
     const signinRules = SignInRules;
@@ -80,45 +81,58 @@ export default {
     const loading = ref(false);
     // 登录提交功能
     const signin = async () => {
-      loading.value = true;
       // 按钮处于加载状态
-      // 获取数据
-      const res = await SignIn(signinState);
-      console.log('%c 🥐 data: ', 'font-size:20px;background-color: #93C0A4;color:#fff;', res);
-      if (res.code != 200) {
-        loading.value = false;
-        ElMessage.error(res.msg);
+      loading.value = true;
+
+      // 进行规则校验
+      const flag = ref(true);
+      SignInFormRef.value.validate((valid) => {
+        flag.value = valid;
+      });
+      if (!flag.value) {
+        ElMessage.error('校验规则不通过');
         return;
       }
-      // 保存storage
-      store.commit('app/setToken', res.data.token);
-      // 跳转页面
-      router.push('/home');
-      loading.value = false;
+      // 获取数据
+      try {
+        const res = await SignIn(signinState.value);
+        console.log('%c 🥐 data: ', 'font-size:20px;background-color: #93C0A4;color:#fff;', res);
+        store.commit('app/setToken', res.data.token);
+        ElMessage.success(res.msg);
+        // 跳转页面
+        router.push('/home');
+      } catch ({ response }) {
+        console.log('%c 🥘 error: ', 'font-size:20px;background-color: #ED9EC7;color:#fff;', response);
+        ElMessage.error(response.data.msg);
+      } finally {
+        loading.value = false;
+      }
     };
     // 注册提交功能
     const signup = async () => {
-      loading.value = false;
+      // 按钮处于加载状态
       loading.value = true;
-      SignUpFormRef.value
-        .validate()
-        .then(async () => {
-          console.log('%c 🥒 signupState: ', 'font-size:20px;background-color: #465975;color:#fff;', signupState);
-          const res = await SignUp(signupState);
-          console.log('%c 🍕 res: ', 'font-size:20px;background-color: #7F2B82;color:#fff;', res);
-          if (res.code != 200) {
-            ElMessage.error(res.msg);
-            return;
-          }
-          // 注册成功后直接跳进行登录，跳转页面
-          signinState.value.stuid = signupState.stuId;
-          signinState.value.password = signupState.password1;
-          signin();
-        })
-        .catch((error) => {
-          console.log('error', error);
-        });
-      loading.value = false;
+      // 进行规则校验
+      const flag = ref(true);
+      signupRules.value.validate((valid) => {
+        flag.value = valid;
+      });
+      if (!flag.value) {
+        ElMessage.error('校验规则不通过');
+        return;
+      }
+      try {
+        const res = await SignUp(signupState.value);
+        console.log('%c 🍕 res: ', 'font-size:20px;background-color: #7F2B82;color:#fff;', res);
+        // 注册成功后直接跳进行登录，跳转页面
+        signinState.value.phone = signupState.value.phone;
+        signinState.value.password = signupState.value.password;
+        signin();
+      } catch ({ response }) {
+        ElMessage.error(response.data.msg);
+      } finally {
+        loading.value = false;
+      }
     };
     return {
       SignInFormRef,

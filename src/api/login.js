@@ -6,10 +6,12 @@ import request from '@/utils/request';
  * @return {*} 返回响应信息
  */
 export function SignIn(data) {
+  console.log('%c 🥪 data: ', 'font-size:20px;background-color: #B03734;color:#fff;', data);
+
   return request({
-    url: '/login',
+    url: '/users/login',
     method: 'post',
-    data,
+    data: data,
   });
 }
 
@@ -20,7 +22,7 @@ export function SignIn(data) {
  */
 export function SignUp(data) {
   return request({
-    url: '/signup',
+    url: '/users/register',
     method: 'post',
     data,
   });

@@ -9,6 +9,7 @@
   "dependencies": {
     "@element-plus/icons-vue": "^0.2.4",
     "ant-design-vue": "^2.2.8",
+    "await-to-js": "^3.0.0",
     "axios": "^0.20.0-0",
     "element-plus": "^1.1.0-beta.21",
     "qs": "^6.10.1",

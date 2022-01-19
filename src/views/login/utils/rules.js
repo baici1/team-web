@@ -1,18 +1,31 @@
-import { reactive } from 'vue';
-export const signupState = reactive({
-  stuId: '',
-  password1: '',
-  password2: '',
+import { ref } from 'vue';
+export const signupState = ref({
+  phone: '1234567890',
+  password: '123456',
+  password2: '123456',
 });
+let text = 'Please input correct mobile phone number';
+let validatePhone = async (_rule, value) => {
+  const reg = /^1(3\d|4[5-9]|5[0-35-9]|6[2567]|7[0-8]|8\d|9[0-35-9])\d{8}$/;
+  if (!reg.test(value)) {
+    return Promise.reject(text);
+  } else {
+    return Promise.resolve();
+  }
+};
 export const SignInRules = {
-  stuid: [
+  phone: [
     {
       required: true,
-      message: "Please input your's studentId",
+      message: "Please input your's phone",
       whitespace: true,
       trigger: 'blur',
     },
     { min: 10, max: 12, message: 'Length should be 10 to 12', trigger: 'blur' },
+    {
+      validator: validatePhone,
+      trigger: ['blur'],
+    },
   ],
   password: [
     {
@@ -26,7 +39,7 @@ export const SignInRules = {
 
 let text2 = "Two inputs don't match!";
 let validatePass2 = async (_rule, value) => {
-  if (value !== signupState.password1) {
+  if (value !== signupState.value.password) {
     return Promise.reject(text2);
   } else {
     return Promise.resolve();
@@ -43,7 +56,7 @@ let validatePass1 = async (_rule, value) => {
   }
 };
 export const SignUpRules = {
-  stuId: [
+  phone: [
     {
       required: true,
       message: "Please input your's studentId",
@@ -51,8 +64,12 @@ export const SignUpRules = {
       trigger: 'blur',
     },
     { min: 10, max: 12, message: 'Length should be 10 to 12', trigger: 'blur' },
+    {
+      validator: validatePhone,
+      trigger: ['blur'],
+    },
   ],
-  password1: [
+  password: [
     {
       required: true,
       message: "Please input your's password",
