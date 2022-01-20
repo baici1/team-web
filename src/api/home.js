@@ -14,12 +14,10 @@ export function GetSpecificArticles(data) {
     data,
   });
 }
-export function GetList(data) {
+export function GetCompetitionTimeList() {
   return request({
-    url: '/getlist',
-    method: 'post',
-    data: {
-      num: data,
-    },
+    url: '/home/game/time',
+    method: 'get',
   });
 }
+

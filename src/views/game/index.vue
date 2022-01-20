@@ -79,17 +79,10 @@ import { ref } from 'vue';
 import { useRoute } from 'vue-router';
 const route = useRoute();
 console.log('%c 🥖 router: ', 'font-size:20px;background-color: #FFDD4D;color:#fff;', route.params.id);
-import { GetList } from '@/api/home';
+
 import Banner from './components/banner.vue';
 
 // 获取文章列表
-const pages = ref([]);
-async function getlist(num) {
-  const res = await GetList(num);
-  console.log('%c 🥝 res: ', 'font-size:20px;background-color: #EA7E5C;color:#fff;', res);
-  pages.value.push(...res.data);
-}
-getlist(10);
 
 const activeIndex = ref('1');
 const handleSelect = (key, keyPath) => {

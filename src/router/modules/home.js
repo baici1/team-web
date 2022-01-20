@@ -10,7 +10,7 @@ export default [
     component: Home,
   },
   {
-    path: '/game/:id',
+    path: '/game',
     name: 'Game',
     component: Game,
   },

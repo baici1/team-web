@@ -7,11 +7,11 @@
       <el-row justify="center">
         <el-col :span="16" :xs="22">
           <div class="title">
-            <div class="title1">关于公示2021年秋季学期教授为本科生上课信息的通知</div>
-            <div class="title1">教通字〔2022〕3号</div>
+            <div class="title1">{{ article.title }}</div>
+            <div class="title1">{{ article.type }}</div>
             <div class="mark">
-              <span>作者:杨澳宇</span>
-              <span>时间:2022-01-05 15:58 </span>
+              <span>作者：{{ article.author }}</span>
+              <span>时间：{{ timeFormatYMD(article.create_time) }}</span>
             </div>
           </div>
         </el-col>
@@ -19,14 +19,10 @@
       <el-row justify="center">
         <el-col :span="16" :xs="22">
           <div class="main-text">
-            <div>
-              各学院： 为落实教授为本科生上课制度，现将公示教授为本科生上课信息的有关事项通知如下：
-              1.本通知中的“教授”是指具有正教授职称的教师（含挂靠教师）；
-              2.本通知中的“课程”是指面向本科生开设的所有理论课和实验课，不含毕业设计（论文）、实习等；
-              3.各学院于1月12日之前在学院网站主页公示本学院当学期教授上课基本信息表（见附件），并将公示网址发送至教务处教学质量管理科。
-              5.
-              要求所公示的教授上课学时数为实际上课的学时数，教授为本科生上课基本信息作为教授年度考核和学院教学工作状态考核的依据。
-            </div>
+            <!-- <div v-html="article.content">
+              {{ article.content }}
+            </div> -->
+            <p v-html="article.content"></p>
           </div>
         </el-col>
       </el-row>
@@ -39,6 +35,25 @@
 <script setup>
 import Header from '@/views/home/components/header.vue';
 import Footer from '@/views/home/components/footer.vue';
+import { useRoute } from 'vue-router';
+import { GetAArticle } from '@/api/page.js';
+import { ref } from 'vue';
+import { timeFormatYMD } from '@/utils/day.js';
+import { ElMessage } from 'element-plus';
+// 获取id
+const route = useRoute();
+const id = route.params.id;
+const article = ref([]);
+let articeDetail = async () => {
+  try {
+    const { data } = await GetAArticle(id);
+    console.log('%c 🍖 data: ', 'font-size:20px;background-color: #42b983;color:#fff;', data);
+    article.value = data;
+  } catch ({ response }) {
+    ElMessage.error('文章' + response.data.msg);
+  }
+};
+articeDetail();
 </script>
 <style lang="scss" scoped>
 // 支持CSS变量注入v-bind(color)

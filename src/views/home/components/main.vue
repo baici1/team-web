@@ -47,9 +47,7 @@
                         {{ item.title }}
                       </n-ellipsis>
                     </el-link>
-                    <el-link>
-                      <span style="color: #999999" class="news-time">{{ timeFormat(item.create_time) }}</span>
-                    </el-link>
+                    <span style="color: #999999" class="news-time">{{ timeFormatMD(item.create_time) }}</span>
                   </div>
                 </el-card>
               </el-col>
@@ -78,7 +76,7 @@
                       </n-ellipsis>
                     </el-link>
                     <el-link>
-                      <span style="color: #999999" class="news-time">{{ timeFormat(item.create_time) }}</span>
+                      <span style="color: #999999" class="news-time">{{ timeFormatMD(item.create_time) }}</span>
                     </el-link>
                   </div>
                 </el-card>
@@ -113,7 +111,7 @@
                       </n-ellipsis>
                     </el-link>
                     <el-link>
-                      <span style="color: #999999" class="news-time">{{ timeFormat(item.create_time) }}</span>
+                      <span style="color: #999999" class="news-time">{{ timeFormatMD(item.create_time) }}</span>
                     </el-link>
                   </div>
                 </el-card>
@@ -143,7 +141,7 @@
                       </n-ellipsis>
                     </el-link>
                     <el-link>
-                      <span style="color: #999999" class="news-time">{{ timeFormat(item.create_time) }}</span>
+                      <span style="color: #999999" class="news-time">{{ timeFormatMD(item.create_time) }}</span>
                     </el-link>
                   </div>
                 </el-card>
@@ -165,11 +163,10 @@
                 :color="activity.color"
                 :size="activity.size"
                 :hollow="activity.hollow"
-                :timestamp="activity.timestamp"
+                :timestamp="`${timeFormatYMD(activity.start_time)}~${timeFormatYMD(activity.end_time)}`"
               >
-                <el-link @click="toLink(activity.id)">
-                  {{ activity.content }}
-                </el-link>
+                <!-- @click="toLink(activity.id)" -->
+                <el-link :href="activity.url"> {{ activity.c_name }}-{{ activity.level }} </el-link>
               </el-timeline-item>
             </el-timeline>
           </el-scrollbar>
@@ -194,12 +191,12 @@
 import { ElMessage } from 'element-plus';
 import { Carousel, Pagination, Slide } from 'vue3-carousel';
 import 'vue3-carousel/dist/carousel.css';
-import { GetShowSwiper, GetSpecificArticles } from '@/api/home';
+import { GetShowSwiper, GetSpecificArticles, GetCompetitionTimeList } from '@/api/home';
 import { ref } from 'vue';
 import { DataAnalysis, Goods } from '@element-plus/icons-vue';
 import SvgIcon from '@/components/SvgIcon/index.vue';
 import { useRouter } from 'vue-router';
-import { timeFormat } from '@/utils/day.js';
+import { timeFormatMD, getYear, timeFormatYMD } from '@/utils/day.js';
 import { NEllipsis } from 'naive-ui';
 const router = useRouter();
 // 获取轮播图
@@ -208,7 +205,7 @@ let Swipers = ref([]);
 let getSwipers = async () => {
   try {
     const { data } = await GetShowSwiper();
-    console.log('%c 🥑 data: ', 'font-size:20px;background-color: #F5CE50;color:#fff;', data);
+    // console.log('%c 🥑 data: ', 'font-size:20px;background-color: #F5CE50;color:#fff;', data);
     Swipers.value = data;
   } catch ({ response }) {
     ElMessage.error(response.data.msg);
@@ -223,123 +220,54 @@ let artparam = ref({
   type: '',
 });
 let articles = ref([]);
+
 async function getArticles(type) {
   for (let i = 0; i < 4; i++) {
-    artparam.value.type = type[i];
-    const { data } = await GetSpecificArticles(artparam.value);
-    console.log('%c 🍨 res: ', 'font-size:20px;background-color: #6EC1C2;color:#fff;', data);
-    articles.value.push(data);
-    show.value[articles.value.length - 1] = false;
+    try {
+      artparam.value.type = type[i];
+      const { data } = await GetSpecificArticles(artparam.value);
+      // console.log('%c 🍨 res: ', 'font-size:20px;background-color: #6EC1C2;color:#fff;', data);
+      articles.value.push(data);
+      show.value[articles.value.length - 1] = false;
+    } catch ({ response }) {
+      ElMessage.error(type[i] + response.data.msg);
+    }
   }
 }
 getArticles(['双创活动', '新闻动态', '通知公告', '政策文件']);
+// console.log('%c 🥪 articles: ', 'font-size:20px;background-color: #FCA650;color:#fff;', articles.value);
 // 时间轴
-const activities = [
+const activities = ref([
   {
-    content: '近一年度',
-    timestamp: '2021-01-01~2022-01-01',
+    c_name: '近一年度',
+    start_time: getYear()[0],
+    end_time: getYear()[1],
     color: '#00C9C8',
     icon: 'el-icon-more',
     id: 123,
+    level: '比赛',
+    url: '/game',
   },
-  {
-    content: '全国大学生电子商务“创新、创意、创业”挑战赛',
-    timestamp: '2018-04-03 20:46',
-    color: '#C25E67',
-    id: '123',
-  },
-  {
-    content: 'Custom color',
-    timestamp: '2018-04-03 20:46',
-    color: '#C25E67',
-    id: '123',
-  },
-  {
-    content: 'Custom color',
-    timestamp: '2018-04-03 20:46',
-    color: '#C25E67',
-    id: '123',
-  },
-  {
-    content: 'Custom color',
-    timestamp: '2018-04-03 20:46',
-    color: '#C25E67',
-  },
-  {
-    content: 'Custom color',
-    timestamp: '2018-04-03 20:46',
-    color: '#0bbd87',
-  },
-  {
-    content: 'Custom color',
-    timestamp: '2018-04-03 20:46',
-    color: '#0bbd87',
-  },
-  {
-    content: 'Custom color',
-    timestamp: '2018-04-03 20:46',
-    color: '#0bbd87',
-  },
-  {
-    content: 'Custom color',
-    timestamp: '2018-04-03 20:46',
-    color: '#0bbd87',
-  },
-  {
-    content: 'Custom color',
-    timestamp: '2018-04-03 20:46',
-    color: '#0bbd87',
-  },
-  {
-    content: 'Custom color',
-    timestamp: '2018-04-03 20:46',
-    color: '#0bbd87',
-  },
-  {
-    content: 'Custom color',
-    timestamp: '2018-04-03 20:46',
-    color: '#4336CF',
-  },
-  {
-    content: 'Custom color',
-    timestamp: '2018-04-03 20:46',
-    color: '#4336CF',
-  },
-  {
-    content: 'Custom color',
-    timestamp: '2018-04-03 20:46',
-    color: '#4336CF',
-  },
-  {
-    content: 'Custom color',
-    timestamp: '2018-04-03 20:46',
-    color: '#4336CF',
-  },
-  {
-    content: 'Custom color',
-    timestamp: '2018-04-03 20:46',
-    color: '#4336CF',
-  },
-  {
-    content: 'Custom color',
-    timestamp: '2018-04-03 20:46',
-    color: '#4336CF',
-  },
-  {
-    content: 'Custom color',
-    timestamp: '2018-04-03 20:46',
-    color: '#4336CF',
-  },
-  {
-    content: 'Custom color',
-    timestamp: '2018-04-03 20:46',
-    color: '#4336CF',
-  },
-];
-// 跳转页面
-function toLink(id) {
-  router.push(`/game/${id}`);
-}
+]);
+let timeList = async () => {
+  try {
+    const { data } = await GetCompetitionTimeList();
+    // console.log('%c 🥠 data: ', 'font-size:20px;background-color: #F5CE50;color:#fff;', data);
+    let status = ['danger', 'success ', 'primary', 'info']; // 已结束，比赛中，报名中，未开始。
+    for (let i = 0; i < data.length; i++) {
+      data[i].type = status[Number(data[i].status)];
+      activities.value.push(data[i]);
+    }
+  } catch ({ response }) {
+    ElMessage.error('比赛时间轴' + response.data.msg);
+  }
+};
+timeList();
+
+// // 跳转页面
+// function toLink(id) {
+//   router.push(`/game/${id}`);
+// }
 function ToDetail(id) {
   router.push(`/details/${id}`);
 }

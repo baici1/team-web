@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory } from 'vue-router';
+import { createRouter, createWebHistory } from 'vue-router';
 // 管理登录注册页面路由
 import Login from './modules/login';
 // 管理个人中心的路由
@@ -7,7 +7,7 @@ import User from './modules/user';
 import Home from './modules/home';
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes: [
     { path: '/', redirect: '/home' },
     ...Login,
