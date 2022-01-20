@@ -32,7 +32,7 @@
                         <!-- <img src="https://static.lanqiao.cn/dasai/images/20210818/title/notice.png" /> -->
                       </div>
                       <div class="nright">
-                        <router-link :to="{ name: 'List', params: { position: 'one' }, query: { id: '123' } }">
+                        <router-link :to="{ name: 'List' }">
                           <el-button class="button" type="text">查看更多</el-button>
                         </router-link>
 
@@ -227,7 +227,7 @@ async function getArticles(type) {
       artparam.value.type = type[i];
       const { data } = await GetSpecificArticles(artparam.value);
       // console.log('%c 🍨 res: ', 'font-size:20px;background-color: #6EC1C2;color:#fff;', data);
-      articles.value.push(data);
+      articles.value.push(data.records);
       show.value[articles.value.length - 1] = false;
     } catch ({ response }) {
       ElMessage.error(type[i] + response.data.msg);

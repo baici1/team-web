@@ -7,26 +7,20 @@
       <el-main class="main-box">
         <el-row justify="center" :gutter="20">
           <el-col :span="2" :xs="0">
-            <el-menu
-              :default-active="route.params.position"
-              class="menu"
-              active-text-color="#fff"
-              @open="handleOpen"
-              @close="handleClose"
-            >
-              <el-menu-item index="one" class="menu-item">
+            <el-menu default-active="双创活动" class="menu" active-text-color="#fff" @select="handleSelect">
+              <el-menu-item index="双创活动" class="menu-item">
                 <SvgIcon name="bar-chart-2-line"></SvgIcon>
-                <span>热门文章</span>
+                <span>双创活动</span>
               </el-menu-item>
-              <el-menu-item index="two" class="menu-item">
+              <el-menu-item index="新闻动态" class="menu-item">
                 <SvgIcon name="message-line"></SvgIcon>
                 <span>新闻动态</span>
               </el-menu-item>
-              <el-menu-item index="three" class="menu-item">
+              <el-menu-item index="通知公告" class="menu-item">
                 <el-icon :size="15"><data-analysis /></el-icon>
                 <span>通知公告</span>
               </el-menu-item>
-              <el-menu-item index="four" class="menu-item">
+              <el-menu-item index="政策文件" class="menu-item">
                 <el-icon :size="15"><goods /></el-icon>
                 <span>政策文件</span>
               </el-menu-item>
@@ -37,25 +31,40 @@
               <div class="list-title">
                 <el-breadcrumb>
                   <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-                  <el-breadcrumb-item>热门文章</el-breadcrumb-item>
+                  <el-breadcrumb-item>{{ artparam.type }}</el-breadcrumb-item>
                 </el-breadcrumb>
               </div>
-              <a-list item-layout="horizontal" :data-source="data" class="list">
+              <a-list item-layout="horizontal" :data-source="articles" class="list">
                 <template #renderItem="{ item }">
                   <a-list-item class="list-item">
                     <a-list-item-meta class="list-meta">
                       <template #title>
-                        <a href="https://www.antdv.com/">{{ item.title }}</a>
+                        <router-link :to="{ name: 'Details', params: { id: item.id } }">
+                          <n-ellipsis style="max-width: 90%">
+                            {{ item.title }}
+                          </n-ellipsis>
+                        </router-link>
                       </template>
                       <template #avatar>
                         <a-avatar :size="10"> </a-avatar>
                       </template>
                     </a-list-item-meta>
-                    <div>{{ item.time }}</div>
+                    <div>{{ timeFormatMD(item.create_time) }}</div>
                   </a-list-item>
                 </template>
               </a-list>
             </div>
+            <el-pagination
+              background
+              :current-page="artparam.page"
+              :page-size="artparam.limit"
+              layout="prev, pager, next"
+              onUpdate:currentPage
+              onUpdate:pageSize
+              :total="total"
+              style="margin-top: 10px"
+            >
+            </el-pagination>
           </el-col>
         </el-row>
       </el-main>
@@ -66,63 +75,43 @@
   </div>
 </template>
 <script setup>
+import { ElMessage } from 'element-plus';
 import Header from '@/views/home/components/header.vue';
 import Footer from '@/views/home/components/footer.vue';
 import { useRoute } from 'vue-router';
+import { ref } from 'vue';
 import { DataAnalysis, Goods } from '@element-plus/icons-vue';
-
+import { GetSpecificArticles } from '@/api/home';
+import { timeFormatMD } from '@/utils/day.js';
+import { NEllipsis } from 'naive-ui';
 const route = useRoute();
 console.log('%c 🥃 route: ', 'font-size:20px;background-color: #F5CE50;color:#fff;', route);
-const data = [
-  {
-    title: 'Ant Design Title 1',
-    time: '2018-04-03 20:46',
-  },
-  {
-    title: 'Ant Design Title 2',
-    time: '2018-04-03 20:46',
-  },
-  {
-    title: 'Ant Design Title 3',
-    time: '2018-04-03 20:46',
-  },
-  {
-    title: 'Ant Design Title 4',
-    time: '2018-04-03 20:46',
-  },
-  {
-    title: 'Ant Design Title 1',
-    time: '2018-04-03 20:46',
-  },
-  {
-    title: 'Ant Design Title 2',
-    time: '2018-04-03 20:46',
-  },
-  {
-    title: 'Ant Design Title 3',
-    time: '2018-04-03 20:46',
-  },
-  {
-    title: 'Ant Design Title 4',
-    time: '2018-04-03 20:46',
-  },
-  {
-    title: 'Ant Design Title 1',
-    time: '2018-04-03 20:46',
-  },
-  {
-    title: 'Ant Design Title 2',
-    time: '2018-04-03 20:46',
-  },
-  {
-    title: 'Ant Design Title 3',
-    time: '2018-04-03 20:46',
-  },
-  {
-    title: 'Ant Design Title 4',
-    time: '2018-04-03 20:46',
-  },
-];
+let artparam = ref({
+  page: 1,
+  limit: 10,
+  type: '',
+});
+let total = ref(0);
+let articles = ref([]);
+let show = ref(true);
+async function getArticles(type) {
+  try {
+    // 获取文章类型
+    artparam.value.type = type;
+    // 发起请求
+    const { data } = await GetSpecificArticles(artparam.value);
+    console.log('%c 🍨 res: ', 'font-size:20px;background-color: #6EC1C2;color:#fff;', data);
+    articles.value = data.records;
+    total.value = data.total;
+    show.value = false;
+  } catch ({ response }) {
+    ElMessage.error(type + response.data.msg);
+  }
+}
+getArticles('双创活动');
+const handleSelect = (key) => {
+  getArticles(key);
+};
 </script>
 <style lang="scss" scoped>
 // 支持CSS变量注入v-bind(color)

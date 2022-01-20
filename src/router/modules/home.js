@@ -20,7 +20,7 @@ export default [
     component: Details,
   },
   {
-    path: '/pages/:position',
+    path: '/pages/list',
     name: 'List',
     component: List,
   },

@@ -13,8 +13,10 @@
         <el-row justify="center">
           <el-col :span="16" :xs="22">
             <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-              <el-menu-item index="1">Processing Center</el-menu-item>
-              <el-menu-item index="4">Orders</el-menu-item>
+              <el-menu-item index="1">全部</el-menu-item>
+              <el-menu-item index="2">报名中</el-menu-item>
+              <el-menu-item index="3">比赛中</el-menu-item>
+              <el-menu-item index="4">已结束</el-menu-item>
             </el-menu>
             <!-- <n-tabs default-value="signin" size="large">
               <n-tab-pane name="signin" tab="登录">DENGLU </n-tab-pane>
