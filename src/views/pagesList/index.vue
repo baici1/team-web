@@ -54,7 +54,7 @@
                 </template>
               </a-list>
             </div>
-            <el-pagination
+            <!-- <el-pagination
               background
               :current-page="artparam.page"
               :page-size="artparam.limit"
@@ -64,7 +64,14 @@
               :total="total"
               style="margin-top: 10px"
             >
-            </el-pagination>
+            </el-pagination> -->
+            <a-pagination
+              :current="artparam.page"
+              :pageSize="artparam.limit"
+              :total="total"
+              show-less-items
+              @change="onChange"
+            />
           </el-col>
         </el-row>
       </el-main>
@@ -96,6 +103,8 @@ let articles = ref([]);
 let show = ref(true);
 async function getArticles(type) {
   try {
+    // 初始化
+    artparam.value.page = 1;
     // 获取文章类型
     artparam.value.type = type;
     // 发起请求
@@ -111,6 +120,10 @@ async function getArticles(type) {
 getArticles('双创活动');
 const handleSelect = (key) => {
   getArticles(key);
+};
+let onChange = (pageNumber) => {
+  artparam.value.page = pageNumber;
+  getArticles(artparam.value.type);
 };
 </script>
 <style lang="scss" scoped>

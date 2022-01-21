@@ -7,16 +7,16 @@
       <el-scrollbar>
         <el-row justify="center">
           <el-col :span="24">
-            <Banner></Banner>
+            <Banner @get-search-str="getSearchStr"></Banner>
           </el-col>
         </el-row>
         <el-row justify="center">
           <el-col :span="16" :xs="22">
-            <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-              <el-menu-item index="1">全部</el-menu-item>
-              <el-menu-item index="2">报名中</el-menu-item>
-              <el-menu-item index="3">比赛中</el-menu-item>
-              <el-menu-item index="4">已结束</el-menu-item>
+            <el-menu default-active="0" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+              <el-menu-item index="0">全部</el-menu-item>
+              <el-menu-item index="1">报名中</el-menu-item>
+              <el-menu-item index="2">比赛中</el-menu-item>
+              <el-menu-item index="3">已结束</el-menu-item>
             </el-menu>
             <!-- <n-tabs default-value="signin" size="large">
               <n-tab-pane name="signin" tab="登录">DENGLU </n-tab-pane>
@@ -26,24 +26,38 @@
         </el-row>
         <el-row justify="center" style="background: rgb(242, 242, 242)">
           <el-col :span="14" :xs="22">
-            <a-list item-layout="vertical" :data-source="data" class="game-list">
+            <a-list item-layout="vertical" :data-source="activities" :loading="loading" class="game-list">
+              <template #loadMore>
+                <div
+                  v-if="isMore"
+                  :style="{ textAlign: 'center', margin: '12px 0', height: '32px', lineHeight: '32px' }"
+                >
+                  <a-spin v-if="loadingMore" />
+                  <a-button v-else @click="loadMore">加载更多</a-button>
+                </div>
+              </template>
               <template #renderItem="{ item }">
                 <el-card class="game-card">
                   <a-list-item>
                     <a-list-item-meta>
                       <template #title>
                         <a href="https://www.antdv.com/" class="game-item-title">
-                          {{ item.title }}
-                          <el-tag type="success" size="small" style="margin-left: 5px">{{ item.tag }}</el-tag>
+                          {{ item.c_name }}
+                          <el-tag type="success" size="small" style="margin-left: 5px">{{
+                            Comstatus[+item.status]
+                          }}</el-tag>
+                          <el-tag type="info" size="small" style="margin-left: 5px">{{ item.c_type }}类赛事</el-tag>
                         </a>
                         <div>
                           <p style="font-size: 14px; color: rgb(102, 102, 102); max-width: 95%">
-                            {{ item.describe }}
+                            {{ item.introduction }}
                           </p>
                           <p style="margin-top: 6px; font-size: 12px; color: rgb(136, 136, 136)">
-                            报名时间： {{ item.startTime }}
+                            报名时间： {{ item.start_time }}
                             <el-divider direction="vertical"></el-divider>
-                            截止时间：{{ item.startTime }}
+                            截止时间：{{ item.end_time }}
+                            <el-divider direction="vertical"></el-divider>
+                            举办方：{{ item.organizer }}
                           </p>
                         </div>
                       </template>
@@ -58,6 +72,11 @@
                     <template #extra>
                       <div class="game-extra">
                         <el-button :disabled="item.isdisabled">参与报名</el-button>
+                      </div>
+                      <div class="game-extra">
+                        <el-button :disabled="item.isdisabled"
+                          ><el-link :href="item.url" target="_blank" :underline="false">前往官网</el-link></el-button
+                        >
                       </div>
                     </template>
                   </a-list-item>
@@ -78,53 +97,72 @@ import Header from '@/views/home/components/header.vue';
 // import { NTabs, NTabPane } from 'naive-ui';
 // import { More } from '@element-plus/icons-vue';
 import { ref } from 'vue';
-import { useRoute } from 'vue-router';
-const route = useRoute();
-console.log('%c 🥖 router: ', 'font-size:20px;background-color: #FFDD4D;color:#fff;', route.params.id);
-
+import { GetCompetitions } from '@/api/page';
 import Banner from './components/banner.vue';
+import { ElMessage } from 'element-plus';
 
 // 获取文章列表
+const comParams = ref({
+  page: 1,
+  limit: 10,
+  status: '',
+  search: '',
+});
 
-const activeIndex = ref('1');
-const handleSelect = (key, keyPath) => {
-  console.log(key, keyPath);
+const Comstatus = ['未开始', '报名中', '进行中', '结束中'];
+const activities = ref([]);
+const loading = ref(false);
+const isMore = ref(true);
+let getcompetition = async (flag) => {
+  try {
+    isMore.value = true;
+    loading.value = true;
+    const { data } = await GetCompetitions(comParams.value);
+    console.log('%c 🌮 data: ', 'font-size:20px;background-color: #ED9EC7;color:#fff;', data);
+    activities.value.push(...data.records);
+    // 判断当前菜单是否发生变化
+    if (flag) {
+      activities.value = data.records;
+    }
+    // 判断是否需要继续加载
+    if (activities.value.length >= data.total) {
+      isMore.value = false;
+    }
+  } catch ({ response }) {
+    ElMessage.error(response.data.msg);
+    activities.value = [];
+    isMore.value = false;
+  } finally {
+    loading.value = false;
+  }
 };
-const data = [
-  {
-    title: '全国高校绿色计算大赛',
-    tag: '正在进行中',
-    describe:
-      '开源项目创新赛聚焦发起或参与开源项目创新开发，设计了命题组和自由组两个组别，其中命题组为参赛团队参与指定开源项目进行贡献。',
-    startTime: '2021-03-31',
-    endTime: '2021-11-30 00:00:00',
-    isdisabled: true,
-  },
-  {
-    title: '全国高校绿色计算大赛',
-    tag: '正在进行中',
-    describe:
-      '开源项目创新赛聚焦发起或参与开源项目创新开发，设计了命题组和自由组两个组别，其中命题组为参赛团队参与指定开源项目进行贡献。',
-    startTime: '2021-03-31',
-    endTime: '2021-11-30 00:00:00',
-  },
-  {
-    title: '全国高校绿色计算大赛',
-    tag: '正在进行中',
-    describe:
-      '开源项目创新赛聚焦发起或参与开源项目创新开发，设计了命题组和自由组两个组别，其中命题组为参赛团队参与指定开源项目进行贡献。',
-    startTime: '2021-03-31',
-    endTime: '2021-11-30 00:00:00',
-  },
-  {
-    title: '全国高校绿色计算大赛',
-    tag: '正在进行中',
-    describe:
-      '开源项目创新赛聚焦发起或参与开源项目创新开发，设计了命题组和自由组两个组别，其中命题组为参赛团队参与指定开源项目进行贡献。',
-    startTime: '2021-03-31',
-    endTime: '2021-11-30 00:00:00',
-  },
-];
+getcompetition();
+// 获取查询字段
+const getSearchStr = (search) => {
+  console.log('%c 🍷 search: ', 'font-size:20px;background-color: #3F7CFF;color:#fff;', search);
+  comParams.value.search = search;
+  console.log('%c 🍬 comParams.value: ', 'font-size:20px;background-color: #FFDD4D;color:#fff;', comParams.value);
+
+  getcompetition(1);
+};
+// 获取更多
+const loadingMore = ref(false);
+let loadMore = () => {
+  loadingMore.value = true;
+  comParams.value.page += 1;
+  getcompetition();
+  loadingMore.value = false;
+};
+// 交换标签获取比赛信息
+const handleSelect = (key) => {
+  comParams.value.page = 1;
+  if (Number(key) > 0) {
+    comParams.value.status = key;
+  } else {
+    comParams.value.status = '';
+  }
+  getcompetition(1);
+};
 </script>
 
 <style lang="scss" scoped>
@@ -150,6 +188,7 @@ const data = [
 }
 .game-list {
   margin-top: 20px;
+  min-height: 400px;
   .game-card {
     margin: 20px 0;
     border-radius: 5px;
@@ -170,6 +209,9 @@ const data = [
       border-radius: 5px;
     }
   }
+}
+.game-extra {
+  margin: 10px 0;
 }
 @media screen and (max-width: 768px) {
   .game-list {

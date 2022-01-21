@@ -10,21 +10,36 @@
     </el-row>
     <el-row justify="center">
       <el-col :span="12" :xs="22">
-        <n-input size="large" round placeholder="查询比赛">
+        <!-- <n-input size="large" round placeholder="查询比赛">
           <template #prefix>
             <el-icon>
               <Search />
             </el-icon>
           </template>
-        </n-input>
+        </n-input> -->
+        <el-input v-model="competition" placeholder="输入比赛名">
+          <template #append>
+            <el-button @click="DoSearch">
+              <SvgIcon name="search-line"></SvgIcon>
+            </el-button>
+          </template>
+        </el-input>
       </el-col>
     </el-row>
   </div>
 </template>
 
 <script setup>
-import { Search } from '@element-plus/icons-vue';
-import { NInput } from 'naive-ui';
+import { defineEmits, ref } from 'vue';
+import SvgIcon from '@/components/SvgIcon/index.vue';
+// import { NInput } from 'naive-ui';
+const competition = ref('');
+// 声明事件
+const emit = defineEmits(['get-search-str']);
+const DoSearch = () => {
+  // 执行
+  emit('get-search-str', competition.value);
+};
 </script>
 
 <style lang="scss" scope>
