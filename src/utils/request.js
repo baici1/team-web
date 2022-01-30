@@ -5,7 +5,7 @@ import store from '@/store';
 
 // 创建axios实例
 const service = axios.create({
-  baseURL: 'http://127.0.0.1:20201', // 设置基础url
+  baseURL: 'http://47.113.203.60:20201', // 设置基础url
   timeout: 10000, // 设置请求超时时间
   // withCredentials: true, 配置发送跨域请求时是否携带cokkie
 });

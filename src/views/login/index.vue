@@ -78,6 +78,7 @@ export default {
     // 表单验证规则
     const signinRules = SignInRules;
     const signupRules = SignUpRules;
+    const flag = ref(true);
     const loading = ref(false);
     // 登录提交功能
     const signin = async () => {
@@ -85,8 +86,9 @@ export default {
       loading.value = true;
 
       // 进行规则校验
-      const flag = ref(true);
+
       SignInFormRef.value.validate((valid) => {
+        console.log('%c 🍉 valid: ', 'font-size:20px;background-color: #4b4b4b;color:#fff;', valid);
         flag.value = valid;
       });
       if (!flag.value) {

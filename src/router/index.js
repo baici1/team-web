@@ -5,6 +5,7 @@ import Login from './modules/login';
 import User from './modules/user';
 // 管理首页的路由
 import Home from './modules/home';
+import Display from './modules/dispaly';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -13,6 +14,7 @@ const router = createRouter({
     ...Login,
     ...User,
     ...Home,
+    ...Display,
     // ...redirect, // 统一的重定向配置
   ],
   scrollBehavior(to, from, savedPosition) {
