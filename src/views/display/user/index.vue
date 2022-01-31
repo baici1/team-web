@@ -121,7 +121,9 @@
       </el-row>
       <!-- 第三部分：饼图显示 -->
       <el-row justify="center" style="margin: 0">
-        <h2>成绩图表显示</h2>
+        <el-col :span="15">
+          <h3 style="font-weight: 700">成绩图表显示</h3>
+        </el-col>
       </el-row>
       <el-row justify="center">
         <el-col :span="8"><chart></chart> </el-col>
@@ -129,7 +131,9 @@
       </el-row>
       <!-- 第四部分：历史赛事记录 -->
       <el-row justify="center" style="margin: 0">
-        <h2>历史赛事记录</h2>
+        <el-col :span="15">
+          <h3 style="font-weight: 700">历史赛事记录</h3>
+        </el-col>
       </el-row>
       <el-row justify="center">
         <el-col :span="15" :xs="22">
