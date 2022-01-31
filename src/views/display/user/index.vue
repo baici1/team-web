@@ -136,62 +136,50 @@
         </el-col>
       </el-row>
       <el-row justify="center">
-        <el-col :span="15" :xs="22">
-          <a-list item-layout="vertical" :data-source="activities" :loading="loading" class="game-list">
-            <template #loadMore>
-              <div v-if="isMore" :style="{ textAlign: 'center', margin: '12px 0', height: '32px', lineHeight: '32px' }">
-                <a-spin v-if="loadingMore" />
-                <a-button v-else @click="loadMore">加载更多</a-button>
-              </div>
-            </template>
-            <template #renderItem="{ item }">
-              <el-card class="game-card">
-                <a-list-item>
-                  <a-list-item-meta>
-                    <template #title>
-                      <a href="https://www.antdv.com/" class="game-item-title">
-                        {{ item.c_name }}
-                        <!-- <el-tag type="success" size="small" style="margin-left: 5px">{{
-                          Comstatus[+item.status]
-                        }}</el-tag> -->
-                        <el-tag type="info" size="small" style="margin-left: 5px">{{ item.c_type }}类赛事</el-tag>
-                      </a>
-                      <div>
-                        <p style="font-size: 14px; color: rgb(102, 102, 102); max-width: 95%">
-                          {{ item.introduction }}
-                        </p>
-                        <p style="margin-top: 6px; font-size: 12px; color: rgb(136, 136, 136)">
-                          报名时间： {{ item.start_time }}
-                          <el-divider direction="vertical"></el-divider>
-                          截止时间：{{ item.end_time }}
-                          <el-divider direction="vertical"></el-divider>
-                          举办方：{{ item.organizer }}
-                        </p>
-                      </div>
-                    </template>
-                    <template #avatar>
-                      <a-avatar
-                        shape="square"
-                        src="https://ali-cdn.educoder.net/images/avatars/Competition/3?t=1591925435"
-                        class="game-item-img"
-                      />
-                    </template>
-                  </a-list-item-meta>
-                  <template #extra>
-                    <!-- <div class="game-extra">
-                      <el-button :disabled="item.isdisabled">参与报名</el-button>
-                    </div> -->
-                    <div class="game-extra">
-                      <el-button :disabled="item.isdisabled"
-                        ><el-link :href="item.url" target="_blank" :underline="false">前往官网</el-link></el-button
-                      >
-                    </div>
-                  </template>
-                </a-list-item>
+        <el-col :span="15" class="history-col">
+          <el-timeline>
+            <el-timeline-item
+              v-for="(activity, index) in activities"
+              :key="index"
+              :icon="activity.icon"
+              :type="activity.type"
+              :color="activity.color"
+              :size="activity.size"
+              :hollow="activity.hollow"
+              :timestamp="activity.timestamp"
+            >
+              <el-card :body-style="{ padding: '10px', background: 'rgb(250, 250, 250)' }" shadow="never">
+                <div class="history-item">
+                  <div class="history-l">
+                    <el-avatar :size="50" src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png">
+                    </el-avatar>
+                    <p style="margin-left: 10px">{{ activity.content }}</p>
+                  </div>
+                  <div class="history-r">
+                    <div>职位： <el-tag type="success">队长</el-tag></div>
+                    <div style="margin-left: 10px">获奖： <el-tag>国家一等奖</el-tag></div>
+                  </div>
+                </div>
               </el-card>
-            </template>
-          </a-list>
+              <el-card :body-style="{ padding: '10px', background: 'rgb(250, 250, 250)' }" shadow="never">
+                <div class="history-item">
+                  <div class="history-l">
+                    <el-avatar :size="50" src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png">
+                    </el-avatar>
+                    <p style="margin-left: 10px">{{ activity.content }}</p>
+                  </div>
+                  <div class="history-r">
+                    <div>职位： <el-tag type="success">队长</el-tag></div>
+                    <div style="margin-left: 10px">获奖： <el-tag>国家一等奖</el-tag></div>
+                  </div>
+                </div>
+              </el-card>
+            </el-timeline-item>
+          </el-timeline>
         </el-col>
+      </el-row>
+      <el-row justify="center">
+        <el-button>查看更多</el-button>
       </el-row>
     </el-main>
     <el-footer><Footer></Footer></el-footer>
@@ -201,52 +189,42 @@
 <script setup>
 import Header from '@/views/home/components/header.vue';
 import Footer from '@/views/home/components/footer.vue';
-import { User, Iphone, Location, Tickets, OfficeBuilding } from '@element-plus/icons-vue';
+import { User, Iphone, Location, Tickets, OfficeBuilding, MoreFilled } from '@element-plus/icons-vue';
 import SvgIcon from '../../../components/SvgIcon/index.vue';
 import { NNumberAnimation } from 'naive-ui';
-import { ref } from 'vue';
-import { GetCompetitions } from '@/api/page';
-import { ElMessage } from 'element-plus';
+// import { ref } from 'vue';
+// import { GetCompetitions } from '@/api/page';
+// import { ElMessage } from 'element-plus';
 import chart from './components/chart.vue';
-// 获取文章列表
-const comParams = ref({
-  page: 1,
-  limit: 1,
-  status: '',
-  search: '',
-});
-
-const activities = ref([]);
-const loading = ref(false);
-const isMore = ref(true);
-let getcompetition = async () => {
-  try {
-    isMore.value = true;
-    loading.value = true;
-    const { data } = await GetCompetitions(comParams.value);
-    console.log('%c 🌮 data: ', 'font-size:20px;background-color: #ED9EC7;color:#fff;', data);
-    activities.value.push(...data.records);
-    // 判断是否需要继续加载
-    if (activities.value.length >= data.total) {
-      isMore.value = false;
-    }
-  } catch ({ response }) {
-    ElMessage.error(response.data.msg);
-    activities.value = [];
-    isMore.value = false;
-  } finally {
-    loading.value = false;
-  }
-};
-getcompetition();
-// 获取更多
-const loadingMore = ref(false);
-let loadMore = () => {
-  loadingMore.value = true;
-  comParams.value.page += 1;
-  getcompetition();
-  loadingMore.value = false;
-};
+const activities = [
+  {
+    content: '蓝桥杯',
+    timestamp: '2018-04',
+    size: 'large',
+    type: 'primary',
+    icon: MoreFilled,
+  },
+  {
+    content: '蓝桥杯',
+    timestamp: '2018-04-03 20:46',
+    color: '#0bbd87',
+  },
+  {
+    content: 'Custom size',
+    timestamp: '2018-04-03 20:46',
+    size: 'large',
+  },
+  {
+    content: 'Custom hollow',
+    timestamp: '2018-04-03 20:46',
+    type: 'primary',
+    hollow: true,
+  },
+  {
+    content: 'Default node',
+    timestamp: '2018-04-03 20:46',
+  },
+];
 </script>
 
 <style lang="scss" scoped>
@@ -319,6 +297,26 @@ let loadMore = () => {
 }
 .game-extra {
   margin: 10px 0;
+}
+.history-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .history-l {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .history-r {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+.history-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 @media screen and (max-width: 768px) {
   .game-list {
